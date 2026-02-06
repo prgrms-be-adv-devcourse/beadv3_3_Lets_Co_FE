@@ -1,0 +1,27 @@
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  server: {
+    proxy: {
+      '/auth': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
+      '/user': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
+      '/seller': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
+      '/products': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      }
+    }
+  }
+})
