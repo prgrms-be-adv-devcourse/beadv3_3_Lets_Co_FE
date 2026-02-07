@@ -92,6 +92,17 @@ export default function SellerRegister() {
                 
                 <button type="submit">제출</button>
             </form>
+
+            <hr/> <br/> <br/>
+
+            <div>
+                <label>예시)</label>
+                <p>220-81-62517</p>
+                <p>KB국민은행</p>
+                <p>미래유통</p>
+                <p>400401-01-284912</p>
+            </div>
+
         </div>
     );
 }

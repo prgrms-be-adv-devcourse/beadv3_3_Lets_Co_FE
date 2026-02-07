@@ -1,4 +1,5 @@
 export interface ProductOptionInfo {
+    code: string;
     name: string;
     sortOrder: number;
     price: number;

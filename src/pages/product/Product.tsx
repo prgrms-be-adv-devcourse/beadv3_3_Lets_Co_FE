@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Search from "../../components/Search";
-import { getProduct } from "../../api/productApi";
+import { getProducts } from "../../api/productApi";
 import { Link } from "react-router-dom";
 import type { ProductInfo } from "../../types/response/productResponse";
 
@@ -16,7 +16,7 @@ export default function Product() {
     const fetchProducts = async (keyword: string, pageNum: number) => {
         try {
             setLoading(true);
-            const data = await getProduct(keyword, pageNum, PAGE_SIZE);
+            const data = await getProducts(keyword, pageNum, PAGE_SIZE);
             
             if (data && data.items) {
                 setProducts(data.items);

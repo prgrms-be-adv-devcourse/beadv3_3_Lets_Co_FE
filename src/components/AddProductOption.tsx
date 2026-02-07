@@ -1,4 +1,3 @@
-
 import type { Dispatch, SetStateAction } from "react";
 import type { ProductOptionInfo } from "../types/ProductOptionInfo";
 import { PRODUCT_STATUS_OPTIONS } from "../types/productStatus";
@@ -8,18 +7,19 @@ interface Props {
     setOptions: Dispatch<SetStateAction<ProductOptionInfo[]>>;
 }
 
-export default function ProductOption({options, setOptions}: Props) {
+export default function AddProductOption({options, setOptions}: Props) {
 
     const handleOptionChange = (index: number, field: keyof ProductOptionInfo, value: any) => {
-            const newOptions = [...options];
-            (newOptions[index] as any)[field] = value; 
-            setOptions(newOptions);
-        };
+        const newOptions = [...options];
+        (newOptions[index] as any)[field] = value; 
+        setOptions(newOptions);
+    };
 
     const addOption = () => {
         const newOption: ProductOptionInfo = {
+            code: '',
             name: '',
-            sortOrder: 0,
+            sortOrder: options.length + 1,
             price: 0,
             salePrice: 0,
             stock: 0,
@@ -29,13 +29,21 @@ export default function ProductOption({options, setOptions}: Props) {
     };
 
     const removeOption = (index: number) => {
+        if (options.length <= 1) {
+            alert("옵션은 최소 1개가 필수입니다.");
+            return;
+        }
+
         const newOptions = options.filter((_, i) => i !== index);
         setOptions(newOptions);
     };
 
-return (
+    return (
         <div>
+            <div>
             <h3>옵션 정보</h3>
+            <button type="button" onClick={addOption}>+ 옵션 추가</button>
+            </div>
 
             {options.map((opt, index) => (
                 <div key={index}>
@@ -53,7 +61,6 @@ return (
                         <label>정렬순서:</label>
                         <input 
                             type="number"
-                            placeholder="정렬순서"
                             value={opt.sortOrder}
                             onChange={(e) => handleOptionChange(index, 'sortOrder', Number(e.target.value))}
                         />
@@ -63,7 +70,6 @@ return (
                         <label>금액:</label>
                         <input 
                             type="number"
-                            placeholder="금액"
                             value={opt.price}
                             onChange={(e) => handleOptionChange(index, 'price', Number(e.target.value))}
                         />
@@ -73,7 +79,6 @@ return (
                         <label>할인금액:</label>
                         <input 
                             type="number"
-                            placeholder="할인금액"
                             value={opt.salePrice}
                             onChange={(e) => handleOptionChange(index, 'salePrice', Number(e.target.value))}
                         />
@@ -81,11 +86,11 @@ return (
 
                     <div>
                         <label>재고:</label>
-                            <input 
+                        <input 
                             type="number"
-                            placeholder="재고"
                             value={opt.stock}
                             onChange={(e) => handleOptionChange(index, 'stock', Number(e.target.value))}
+                            min="0"
                         />
                     </div>
 
@@ -104,12 +109,9 @@ return (
                     </div>
 
                     <button type="button" onClick={() => removeOption(index)}>삭제</button>
-                    
                     <hr/>
                 </div>
             ))}
-            
-            <button type="button" onClick={addOption}>+ 옵션 추가</button>
         </div>
     );
 };

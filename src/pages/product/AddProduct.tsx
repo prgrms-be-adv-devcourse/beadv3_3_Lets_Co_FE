@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ProductOption from "../../components/ProductOption";
+import AddProductOption from "../../components/addProductOption";
 import type { ProductOptionInfo } from "../../types/ProductOptionInfo";
 import { useNavigate } from "react-router-dom";
 import type { AddProductRequest } from "../../types/request/addProductRequest";
@@ -12,39 +12,50 @@ export default function AddProduct () {
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
     const [salePrice, setSalePrice] = useState(0);
-    const [stock, setStock] = useState(0);
     const [productStatus, setProductStatus] = useState('ON_SALE');
-    const [options, setOptions] = useState<ProductOptionInfo[]>([]);
+    
+    const [options, setOptions] = useState<ProductOptionInfo[]>([
+        {
+            code: '',
+            name: '',
+            sortOrder: 1,
+            price: 0,
+            salePrice: 0,
+            stock: 0,
+            status: 'ON_SALE'
+        }
+    ]);
 
     const navigate = useNavigate();
 
+    const totalStock = options.reduce((acc, cur) => acc + (Number(cur.stock) || 0), 0);
 
     const handleSubmit = async (e: React.FormEvent) => {
-
         e.preventDefault();
+
+        if (options.length === 0) {
+            alert("최소 1개의 옵션을 등록해야 합니다.");
+            return;
+        }
 
         const productData: AddProductRequest = {
             name: productName,
             description: description,
             price: price,
             salePrice: salePrice,
-            stock: stock,
+            stock: totalStock,
             status: productStatus,
             options: options,
             images: [] 
         }
 
-        
         try {
             await addProduct(productData);
-
             alert("상품이 정상적으로 등록되었습니다.");
             navigate('/seller');
         } catch (error) {
-            console.log(productData);
-            
-            alert("알 수 없는 오류가 발생했습니다.");
-            console.error("예상치 못한 에러:", error);
+            console.error(error);
+            alert("상품 등록 실패: 권한이 없거나 오류가 발생했습니다.");
         }
     };
 
@@ -60,6 +71,7 @@ export default function AddProduct () {
                         value={productName}
                         onChange={(e) => setProductName(e.target.value)}
                         placeholder="상품명"
+                        required 
                     />
                 </div>
                 
@@ -80,6 +92,7 @@ export default function AddProduct () {
                         value={price}
                         onChange={(e) => setPrice(Number(e.target.value))}
                         placeholder="가격"
+                        min="0"
                     />
                 </div>      
 
@@ -90,16 +103,17 @@ export default function AddProduct () {
                         value={salePrice}
                         onChange={(e) => setSalePrice(Number(e.target.value))}
                         placeholder="할인가"
+                        min="0"
                     />
                 </div>
                 
                 <div>
-                    <label>재고:</label>
+                    <label>총 재고:</label>
                     <input
                         type="number"
-                        value={stock}
-                        onChange={(e) => setStock(Number(e.target.value))}
-                        placeholder="상품명"
+                        value={totalStock}
+                        readOnly
+                        placeholder="옵션 재고 합계"
                     />
                 </div>
                 
@@ -115,11 +129,11 @@ export default function AddProduct () {
                             </option>
                         ))}
                     </select>
-                </div>                            
+                </div>                                    
 
                 <hr/>
                 
-                <ProductOption 
+                <AddProductOption 
                     options={options} 
                     setOptions={setOptions}
                 />
