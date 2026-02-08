@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { ProductOptionInfo } from "../types/ProductOptionInfo";
+import type { ProductOptionInfo } from "../types/productOptionInfo";
 import { PRODUCT_STATUS_OPTIONS } from "../types/productStatus";
 
 interface Props {
@@ -17,6 +17,7 @@ export default function AddProductOption({options, setOptions}: Props) {
 
     const addOption = () => {
         const newOption: ProductOptionInfo = {
+            optionGroupIdx: 0,
             code: '',
             name: '',
             sortOrder: options.length + 1,

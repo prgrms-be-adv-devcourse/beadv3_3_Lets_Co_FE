@@ -1,13 +1,4 @@
-export interface productOptionInfo {
-    optionGroupIdx: number;
-    code: string
-    name: string
-    sortOrder: number
-    price: number
-    salePrice: number
-    stock: number
-    status: string
-}
+import type { ProductOptionInfo } from "../productOptionInfo";
 
 export interface ProductDetailResponse {
     productsCode: string;
@@ -18,5 +9,5 @@ export interface ProductDetailResponse {
     viewCount: number;
     stock: number;
     status: string;
-    options: productOptionInfo[];
+    options: ProductOptionInfo[];
 }

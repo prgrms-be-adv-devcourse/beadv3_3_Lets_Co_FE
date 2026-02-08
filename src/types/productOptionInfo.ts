@@ -1,4 +1,5 @@
 export interface ProductOptionInfo {
+    optionGroupIdx: number;
     code: string;
     name: string;
     sortOrder: number;

@@ -1,11 +1,4 @@
-export interface ProductInfo {
-    productsIdx: number;
-    productsCode: string;
-    name: string;
-    price: number;
-    salePrice: number;
-    viewCount: number;
-}
+import type { ProductInfo } from "../productInfo";
 
 export interface ProductResponse {
     resultCode: string;

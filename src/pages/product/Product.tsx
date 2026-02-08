@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Search from "../../components/Search";
 import { getProducts } from "../../api/productApi";
 import { Link } from "react-router-dom";
-import type { ProductInfo } from "../../types/response/productResponse";
+import type { ProductInfo } from "../../types/productInfo"; 
 
 export default function Product() {
 

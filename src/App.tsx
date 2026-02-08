@@ -12,6 +12,7 @@ import SellerRegister from "./pages/seller/SellerRegister";
 import SellerCheck from "./pages/seller/SellerCheck";
 import AddProduct from "./pages/product/AddProduct";
 import ProductDetails from "./pages/product/ProductDetails";
+import Payment from "./pages/order/Payment";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/checkCode" element={<RegisterCheck />} />
         <Route path="/products/:optionCode" element={<ProductDetails />} />
+        <Route path="/payment" element={<Payment />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my" element={<MyPage />} /> 
         <Route path="/my/profile" element={<Profile />} /> 

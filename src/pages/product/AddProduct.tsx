@@ -1,6 +1,6 @@
-import { useState } from "react";
-import AddProductOption from "../../components/addProductOption";
-import type { ProductOptionInfo } from "../../types/ProductOptionInfo";
+import { useState, type FormEvent } from "react";
+import AddProductOption from "../../components/AddProductOption";
+import type { ProductOptionInfo } from "../../types/productOptionInfo"; 
 import { useNavigate } from "react-router-dom";
 import type { AddProductRequest } from "../../types/request/addProductRequest";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
@@ -16,6 +16,7 @@ export default function AddProduct () {
     
     const [options, setOptions] = useState<ProductOptionInfo[]>([
         {
+            optionGroupIdx: 0,
             code: '',
             name: '',
             sortOrder: 1,
@@ -28,9 +29,7 @@ export default function AddProduct () {
 
     const navigate = useNavigate();
 
-    const totalStock = options.reduce((acc, cur) => acc + (Number(cur.stock) || 0), 0);
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
         if (options.length === 0) {
@@ -43,7 +42,7 @@ export default function AddProduct () {
             description: description,
             price: price,
             salePrice: salePrice,
-            stock: totalStock,
+            stock: 0,
             status: productStatus,
             options: options,
             images: [] 
@@ -104,16 +103,6 @@ export default function AddProduct () {
                         onChange={(e) => setSalePrice(Number(e.target.value))}
                         placeholder="할인가"
                         min="0"
-                    />
-                </div>
-                
-                <div>
-                    <label>총 재고:</label>
-                    <input
-                        type="number"
-                        value={totalStock}
-                        readOnly
-                        placeholder="옵션 재고 합계"
                     />
                 </div>
                 

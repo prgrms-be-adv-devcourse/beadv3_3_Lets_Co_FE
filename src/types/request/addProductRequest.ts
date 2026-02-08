@@ -1,4 +1,4 @@
-import type { ProductOptionInfo } from "../ProductOptionInfo";
+import type { ProductOptionInfo } from "../productOptionInfo";
 
 export interface AddProductRequest {
         name: string;
