@@ -1,15 +1,10 @@
+import type { ProductRequest } from "./productRequest";
 import type { AddressInfo } from "../addressInfo";
 import type { CardInfo } from "../cardInfo";
 
-interface ProductRequestData {
-    productCode: string;
-    optionCode: string;
-    quantity: number;
-}
-
 export interface OrderRequest {
     orderType: string;
-    productInfo: ProductRequestData;
+    productRequest: ProductRequest;
     addressInfo: AddressInfo;
     cardInfo: CardInfo;
     paymentType: string;

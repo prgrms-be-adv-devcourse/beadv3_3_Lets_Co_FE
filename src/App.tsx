@@ -13,6 +13,7 @@ import SellerCheck from "./pages/seller/SellerCheck";
 import AddProduct from "./pages/product/AddProduct";
 import ProductDetails from "./pages/product/ProductDetails";
 import Payment from "./pages/order/Payment";
+import Cart from "./pages/order/Cart";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/seller/register" element={<SellerRegister />} /> 
         <Route path="/seller/check" element={<SellerCheck />} /> 
         <Route path="/seller/product/add" element={<AddProduct />} /> 
+        <Route  path="/cart" element={<Cart />} /> 
       </Routes>
 
     </div>

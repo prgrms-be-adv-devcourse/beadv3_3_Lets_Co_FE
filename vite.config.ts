@@ -26,6 +26,11 @@ export default defineConfig({
       '/orders': {
         target: "http://localhost:8000",
         changeOrigin: true
+      },
+
+      '/carts': {
+        target: "http://localhost:8000",
+        changeOrigin: true
       }
     }
   }

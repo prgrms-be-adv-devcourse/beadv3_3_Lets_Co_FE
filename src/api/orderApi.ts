@@ -1,4 +1,3 @@
-import type { OrderCartRequest } from "../types/request/orderCartRequest";
 import type { OrderRequest } from "../types/request/OrderRequest"; 
 import client from "./client";
 
