@@ -4,7 +4,7 @@ import type { CardInfo } from "../cardInfo";
 
 export interface OrderRequest {
     orderType: string;
-    productRequest: ProductRequest;
+    productInfo: ProductRequest;
     addressInfo: AddressInfo;
     cardInfo: CardInfo;
     paymentType: string;
