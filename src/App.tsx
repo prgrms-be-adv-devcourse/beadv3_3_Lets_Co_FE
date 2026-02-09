@@ -34,7 +34,7 @@ function App() {
         <Route path="/seller/register" element={<SellerRegister />} /> 
         <Route path="/seller/check" element={<SellerCheck />} /> 
         <Route path="/seller/product/add" element={<AddProduct />} /> 
-        <Route  path="/cart" element={<Cart />} /> 
+        <Route path="/cart" element={<Cart />} /> 
       </Routes>
 
     </div>

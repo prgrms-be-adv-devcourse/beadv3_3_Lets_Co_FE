@@ -1,11 +1,11 @@
-import type { OrderRequest } from "../types/request/OrderRequest"; 
+import type { OrderRequest } from "../types/request/orderRequest";
 import client from "./client";
 
 const BASE_URL = "/orders";
 
 export const order = 
-    async(orderDirectRequest: OrderRequest) => {
-        const response = await client.post(BASE_URL, orderDirectRequest);
+    async(orderData: OrderRequest) => {
+        const response = await client.post(BASE_URL, orderData);
         console.log(response.data);
 
         return response.data;

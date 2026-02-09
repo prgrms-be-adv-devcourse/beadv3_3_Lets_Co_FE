@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { CardInfo } from "../../types/cardInfo";
-import type { OrderRequest } from "../../types/request/OrderRequest";
 import { order } from "../../api/orderApi";
 import { getProduct } from "../../api/productApi";
+import type { OrderRequest } from "../../types/request/orderRequest";
 
 // 화면 표시용 타입 (UI 전용)
 interface OrderItemView {
@@ -132,7 +132,7 @@ export default function Payment() {
         const requestData: OrderRequest = {
             orderType: stateParams?.orderType || "DIRECT",
             
-            productRequest: productReqData as any, 
+            productInfo: productReqData as any, 
 
             addressInfo: {
                 recipient,
