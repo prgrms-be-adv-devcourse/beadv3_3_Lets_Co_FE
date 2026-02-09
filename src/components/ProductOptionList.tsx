@@ -1,6 +1,6 @@
 import type { ProductOptionInfo } from "../types/productOptionInfo";
 
-export default function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
+function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
     if (!options || options.length === 0) {
         return <div>등록된 옵션이 없습니다.</div>;
     }
@@ -41,3 +41,5 @@ export default function ProductOptionList({ options }: { options: ProductOptionI
         </div>
     );
 }
+
+export default ProductOptionList;

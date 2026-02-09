@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { checkCode } from "../../api/sellerApi";
 
-export default function SellerCheck() {
+function SellerCheck() {
 
     const [code, setCode] = useState('');
 
@@ -49,3 +49,5 @@ export default function SellerCheck() {
         </div>
     );
 };
+
+export default SellerCheck;

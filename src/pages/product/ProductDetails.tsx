@@ -6,7 +6,7 @@ import type { ProductDetailResponse } from "../../types/response/productDetailRe
 import type { ProductOptionInfo } from "../../types/productOptionInfo";
 import ProductOptionList from "../../components/ProductOptionList";
 
-export default function ProductDetails() {
+function ProductDetails() {
     const { optionCode } = useParams<{ optionCode: string }>(); 
     const navigate = useNavigate();
 
@@ -99,12 +99,14 @@ export default function ProductDetails() {
             orderType: "DIRECT"
         };
 
+        alert() // 이러면 씹힘 (시간차 때문에 -> 그래서 토스트 써서 js 딴으로)
         navigate("/payment", { state: orderParams });
     };
 
     if (loading) return <div>로딩 중...</div>;
     if (!product) return <div>상품 정보 없음</div>;
 
+    // 리덕스 -> 리코일 react 18 이상은 못씀.... (나중에 욕심이 있으면 -> 상태관리 라이브러리)
     return (
         <div>
             <h1>상품 상세 페이지</h1>
@@ -116,7 +118,7 @@ export default function ProductDetails() {
                 <p>조회수: {product.viewCount}</p>
                 
                 <hr />
-
+                
                 <ProductOptionList options={product.options} />
             </div>
 
@@ -175,3 +177,5 @@ export default function ProductDetails() {
         </div>
     );
 }
+
+export default ProductDetails

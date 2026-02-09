@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Seller() {
+function Seller() {
     
     return (
         <div>
@@ -10,3 +10,5 @@ export default function Seller() {
         </div>
     );
 }
+
+export default Seller;

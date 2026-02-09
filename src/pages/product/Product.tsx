@@ -6,6 +6,13 @@ import type { ProductInfo } from "../../types/productInfo";
 
 export default function Product() {
 
+    // 여기에 함수를 변수로 선언해서 넣을 수 있음 (이벤트 헨들러) 
+    // 코드가 길어질 때 인라인 함수보다는 따로 변수를 선언해서 따로 대입해서 사용하는것이 코드가 더 보기 수월해짐 (가독성)
+    const prev = () => { 
+        // 여기에 코드를 작성
+        setPage((prev) => Math.max(0, prev - 1))
+    }
+    
     const [products, setProducts] = useState<ProductInfo[]>([]); 
     const [searchKeyword, setSearchKeyword] = useState('');
     const [page, setPage] = useState(0);
@@ -86,7 +93,7 @@ export default function Product() {
 
             <div>
                 <button 
-                    onClick={() => setPage((prev) => Math.max(0, prev - 1))}
+                    onClick={prev}
                     disabled={page === 0}
                 >
                     이전
@@ -95,6 +102,7 @@ export default function Product() {
                 <span>현재 페이지: {page + 1}</span>
 
                 <button 
+                    // 인라인 방식
                     onClick={() => setPage((prev) => prev + 1)}
                     disabled={products.length < PAGE_SIZE} 
                 >

@@ -4,7 +4,7 @@ import type { SellerRegisterRequest } from "../../types/request/sellerRegisterRe
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
-export default function SellerRegister() {
+function SellerRegister() {
 
     const [businessLicense, setBusinessLicense] = useState('');
     const [bankBrand, setBankBrand] = useState('');
@@ -106,3 +106,5 @@ export default function SellerRegister() {
         </div>
     );
 }
+
+export default SellerRegister;

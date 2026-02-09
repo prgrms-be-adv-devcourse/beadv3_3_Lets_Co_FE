@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { logout } from "../api/authApi";
 
-export default function NavBar() {
+function NavBar() {
 
     return (
         <nav>
@@ -14,3 +14,5 @@ export default function NavBar() {
         </nav>
     );
 };
+
+export default NavBar;

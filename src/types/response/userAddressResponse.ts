@@ -1,5 +1,5 @@
 export interface UserAddressResponse {
-	addressIdx : number;
+	addressCode : string;
 	address: string;
 	addressDetail: string;
 	phoneNumber: string;
