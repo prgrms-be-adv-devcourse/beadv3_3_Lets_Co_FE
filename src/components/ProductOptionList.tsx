@@ -1,4 +1,4 @@
-import type { ProductOptionInfo } from "../types/ProductOptionInfo";
+import type { ProductOptionInfo } from "../types/productOptionInfo";
 
 export default function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
     if (!options || options.length === 0) {
