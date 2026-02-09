@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Sector() {
+function Sector() {
 
     return (
         <div>
@@ -11,3 +11,5 @@ export default function Sector() {
         </div>
     );
 }
+
+export default Sector;

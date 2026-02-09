@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { UserProfileResponse } from "../../types/response/userProfileResponse";
 import { profile } from "../../api/userApi";
 
-export default function Profile() {
+function Profile() {
 
     const [userProfile, setProfile] = useState<UserProfileResponse | null> (null);
     const [loading, setLoading] = useState(true);
@@ -62,3 +62,5 @@ export default function Profile() {
         </div>
     );
 } 
+
+export default Profile;

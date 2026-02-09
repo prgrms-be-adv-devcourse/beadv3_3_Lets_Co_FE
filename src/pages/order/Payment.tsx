@@ -16,7 +16,7 @@ interface OrderItemView {
     optionCode?: string;
 }
 
-export default function Payment() {
+function Payment() {
     const location = useLocation();
     const navigate = useNavigate();
     
@@ -243,3 +243,5 @@ export default function Payment() {
         </div>
     );
 }
+
+export default Payment;

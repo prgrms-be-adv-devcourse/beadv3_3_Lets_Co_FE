@@ -3,7 +3,7 @@ import type { LoginRequest } from "../../types/request/loginRequest";
 import { login } from "../../api/authApi";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
+function Login() {
 
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');    
@@ -63,3 +63,6 @@ export default function Login() {
         </div>
     );
 };
+
+
+export default Login;

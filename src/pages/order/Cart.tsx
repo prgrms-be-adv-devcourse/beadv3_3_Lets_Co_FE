@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import type { CartItemResponse } from "../../types/response/cartItemResponse";
 import { getCarts } from "../../api/cartApi"; 
 
-export default function Cart() {
-    const navigate = useNavigate();
-
+function Cart() {
     const [cartItem, setCartItem] = useState<CartItemResponse[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCartList = async () => {
@@ -80,3 +80,5 @@ export default function Cart() {
         </div>
     );
 }
+
+export default Cart;

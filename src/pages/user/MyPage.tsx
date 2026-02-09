@@ -3,7 +3,7 @@ import { myPage } from "../../api/userApi";
 import type { UserResponse } from "../../types/response/userResponse";
 import { Link } from "react-router-dom";
 
-export default function MyPage() {
+function MyPage() {
 
     const [user, setUser] = useState<UserResponse | null> (null);
     const [loading, setLoading] = useState(true);
@@ -64,3 +64,5 @@ export default function MyPage() {
         </div>
     );
 }
+
+export default MyPage;

@@ -1,7 +1,7 @@
 import Sector from "../components/Sector";
 import Product from "./product/Product";
 
-export default function Home() {
+function Home() {
 
   return (
     <div> 
@@ -12,3 +12,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

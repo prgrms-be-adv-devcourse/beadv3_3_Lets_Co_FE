@@ -7,7 +7,7 @@ interface Props {
     setOptions: Dispatch<SetStateAction<ProductOptionInfo[]>>;
 }
 
-export default function AddProductOption({options, setOptions}: Props) {
+function AddProductOption({options, setOptions}: Props) {
 
     const handleOptionChange = (index: number, field: keyof ProductOptionInfo, value: any) => {
         const newOptions = [...options];
@@ -17,7 +17,6 @@ export default function AddProductOption({options, setOptions}: Props) {
 
     const addOption = () => {
         const newOption: ProductOptionInfo = {
-            optionGroupIdx: 0,
             code: '',
             name: '',
             sortOrder: options.length + 1,
@@ -116,3 +115,5 @@ export default function AddProductOption({options, setOptions}: Props) {
         </div>
     );
 };
+
+export default AddProductOption;

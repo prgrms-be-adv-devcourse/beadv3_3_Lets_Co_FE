@@ -4,7 +4,7 @@ interface Props {
     onSearch: (keyword: string) => void;
 }
 
-export default function Search({ onSearch }: Props) {
+function Search({ onSearch }: Props) {
 
     const [keyword, setKeyword] = useState('');
 
@@ -27,3 +27,6 @@ export default function Search({ onSearch }: Props) {
         </search>
     );
 }
+
+
+export default Search;

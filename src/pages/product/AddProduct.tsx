@@ -6,7 +6,7 @@ import type { AddProductRequest } from "../../types/request/addProductRequest";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
 import { addProduct } from "../../api/productApi";
 
-export default function AddProduct () {
+function AddProduct () {
 
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
@@ -14,9 +14,10 @@ export default function AddProduct () {
     const [salePrice, setSalePrice] = useState(0);
     const [productStatus, setProductStatus] = useState('ON_SALE');
     
+    const navigate = useNavigate();
+    
     const [options, setOptions] = useState<ProductOptionInfo[]>([
         {
-            optionGroupIdx: 0,
             code: '',
             name: '',
             sortOrder: 1,
@@ -26,8 +27,6 @@ export default function AddProduct () {
             status: 'ON_SALE'
         }
     ]);
-
-    const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -132,3 +131,5 @@ export default function AddProduct () {
         </div>
     );
 }
+
+export default AddProduct;

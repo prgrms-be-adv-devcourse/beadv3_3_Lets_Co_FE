@@ -4,10 +4,9 @@ import { checkCode } from "../../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
-export default function RegisterCheck() {
+function RegisterCheck() {
 
     const [code, setCode] = useState('');
-
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
@@ -49,3 +48,5 @@ export default function RegisterCheck() {
         </div>
     );
 };
+
+export default RegisterCheck;

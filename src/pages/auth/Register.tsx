@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api/authApi";
 import type { RegisterRequest } from "../../types/request/registerRequest";
 
-export default function Register() {
+function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -30,6 +30,21 @@ export default function Register() {
             return;
         }
         
+        // 유효성 검사 - 위 방식 말고 다른 방식도 있음..
+        // 정규 표현식 이용해서 비쥬얼 적으로 
+        /*
+            let regExp = /^[A-Za-z0-9]{5, 10}$/;
+            let str = "user01";  // 6글자, 영문자 포함, 숫자 포함
+
+            if(regExp.test(str)) {
+                // true
+            }
+            
+            // 몇글자 이상 영문, 숫자 포함 - 정규 표현식1
+            // 특수문자 포함 - 정규 표현식2
+            // 연속된 글자 불가 - 정규 표현식3
+        */
+
         const userData: RegisterRequest = {
             ID: username, 
             PW: password,
@@ -145,3 +160,5 @@ export default function Register() {
         </div>
     );
 };
+
+export default Register;
