@@ -9,9 +9,9 @@ on: # 트리거 조건
     branches:
       - main
       - dev
-      #- feat/CD_lyh # 임시
-    paths:
-      - "Front/**" # Front 폴더 내의 파일이 변경되었을 때만 실행
+
+    #paths:
+    #  - "/**" 
   workflow_dispatch: # 수동으로 실행 버튼을 눌러서 시작할 수도 있음
 
   # 👇 [여기 추가] 이 권한 설정이 반드시 필요합니다!
@@ -30,7 +30,7 @@ jobs:
       VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }} # Front 전용 YML 전달
     with: # 필요한 파라미터 전달
       service-name: front-service
-      service-dir: Front
+      service-dir: "."
       file-name: Dockerfile
       tag-prefix: "v" # v1.0.0 형식으로 생성됨
 
