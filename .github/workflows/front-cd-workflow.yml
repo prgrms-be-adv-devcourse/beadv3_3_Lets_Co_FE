@@ -41,6 +41,6 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     with:
-      service-name: front-service
+      service-name: react-service
       # releasing 단계에서 만들어진 태그(버전)를 넘겨받아 배포에 사용
       image-tag: ${{ needs.releasing.outputs.tag_name }}
