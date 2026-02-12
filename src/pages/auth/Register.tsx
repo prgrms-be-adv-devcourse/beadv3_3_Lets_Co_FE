@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api/authApi";
 import type { RegisterRequest } from "../../types/request/registerRequest";
-import { GENDER_OPTIONS, GENDER_STATUS_LABELS } from "../../types/genderStatus";
+import { GENDER_OPTIONS } from "../../types/genderStatus";
 
 function Register() {
 

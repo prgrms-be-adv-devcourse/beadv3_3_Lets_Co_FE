@@ -14,6 +14,7 @@ import AddProduct from "./pages/product/AddProduct";
 import ProductDetails from "./pages/product/ProductDetails";
 import Payment from "./pages/order/Payment";
 import Cart from "./pages/order/Cart";
+import Charge from "./pages/order/Charge";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/my" element={<MyPage />} /> 
         <Route path="/my/profile" element={<Profile />} /> 
+        <Route path="/charge" element={<Charge />} /> 
         <Route path="/seller" element={<Seller />} /> 
         <Route path="/seller/register" element={<SellerRegister />} /> 
         <Route path="/seller/check" element={<SellerCheck />} /> 

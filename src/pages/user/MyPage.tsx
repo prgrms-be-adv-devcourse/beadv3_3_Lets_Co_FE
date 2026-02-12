@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { myPage } from "../../api/userApi";
 import type { UserResponse } from "../../types/response/userResponse";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function MyPage() {
 
     const [user, setUser] = useState<UserResponse | null> (null);
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,6 +52,9 @@ function MyPage() {
                 <div>
                     <span>잔액:</span>
                     <span>{user.balance.toLocaleString()} 원</span>
+                    <button onClick={() => navigate("/charge")}>
+                        충전
+                    </button>
                 </div>
 
                 <div>
