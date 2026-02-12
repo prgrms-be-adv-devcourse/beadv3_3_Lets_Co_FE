@@ -15,7 +15,7 @@ function SellerCheck() {
         e.preventDefault(); 
 
         const auth: AuthenticationRequest = {
-            code: code
+            authCode: code
         };
 
         try {
