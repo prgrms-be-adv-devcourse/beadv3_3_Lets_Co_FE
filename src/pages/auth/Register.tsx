@@ -2,11 +2,16 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api/authApi";
 import type { RegisterRequest } from "../../types/request/registerRequest";
+import { GENDER_OPTIONS } from "../../types/genderStatus";
 
 function Register() {
+
     const [username, setUsername] = useState('');
+    const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
+    const [pwCheck, setPwCheck] = useState('');
     const [name, setName] = useState('');
+    const [gender, setGender] = useState('');
     const [phoneNum, setPhoneNum] = useState('');
     const [birth, setBirth] = useState('');
     const [agreeTerms, setAgreeTerms] = useState(false);
@@ -47,8 +52,11 @@ function Register() {
 
         const userData: RegisterRequest = {
             ID: username, 
+            Mail: mail,
             PW: password,
+            PW_CHECK: pwCheck,
             name: name,
+            gender: gender,
             phoneNumber: phoneNum,
             birth: birth,
             agreeTermsAt: now,
@@ -87,6 +95,16 @@ function Register() {
                 </div>
 
                 <div>
+                    <label>이메일: </label>
+                    <input 
+                        type="text" 
+                        value={mail}
+                        onChange={(e) => setMail(e.target.value)}
+                        placeholder="이메일"
+                    />
+                </div>
+
+                <div>
                     <label>Password: </label>
                     <input 
                         type="password" 
@@ -97,9 +115,19 @@ function Register() {
                 </div>
 
                 <div>
+                    <label>확인: </label>
+                    <input 
+                        type="password" 
+                        value={pwCheck}
+                        onChange={(e) => setPwCheck(e.target.value)}
+                        placeholder="비밀번호 확인"
+                    />
+                </div>
+
+                <div>
                     <label>이름: </label>
                     <input 
-                        type="name" 
+                        type="text" 
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="성함"
@@ -107,9 +135,25 @@ function Register() {
                 </div>
 
                 <div>
+                    <label>성별: </label>
+                    <select 
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                    >
+                        <option value="">선택해주세요</option>
+
+                        {GENDER_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
                     <label>핸드폰: </label>
                     <input 
-                        type="phoneNum" 
+                        type="text" 
                         value={phoneNum}
                         onChange={(e) => setPhoneNum(e.target.value)}
                         placeholder="핸드폰"

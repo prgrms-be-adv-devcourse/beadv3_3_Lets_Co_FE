@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { AddProductRequest } from "../../types/request/addProductRequest";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
 import { addProduct } from "../../api/productApi";
+import type { ProductImageInfo } from "../../types/ProductImageInfo";
 
 function AddProduct () {
 
@@ -28,6 +29,15 @@ function AddProduct () {
         }
     ]);
 
+    const [images, setImages] = useState<ProductImageInfo[]>([
+        {
+            imageIdx: null,
+            url: '',
+            sortOrder: 0,
+            isThumbnail: false
+        }
+    ])
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
@@ -44,7 +54,7 @@ function AddProduct () {
             stock: 0,
             status: productStatus,
             options: options,
-            images: [] 
+            images: null
         }
 
         try {

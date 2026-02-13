@@ -5,7 +5,7 @@ function Home() {
 
   return (
     <div> 
-      <h1>홈페이지</h1>
+      <h1>Gutjjeu</h1>
 
       <Sector/> <hr/>
       <Product/>

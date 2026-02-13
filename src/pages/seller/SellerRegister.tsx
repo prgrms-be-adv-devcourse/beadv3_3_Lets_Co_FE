@@ -6,6 +6,7 @@ import { AxiosError } from "axios";
 
 function SellerRegister() {
 
+    const [sellerName, setSellerName] = useState('');
     const [businessLicense, setBusinessLicense] = useState('');
     const [bankBrand, setBankBrand] = useState('');
     const [bankName, setBankName] = useState('');
@@ -23,6 +24,7 @@ function SellerRegister() {
         }
 
         const sellerData: SellerRegisterRequest = {
+            sellerName: sellerName,
             businessLicense: businessLicense,
             bankBrand: bankBrand,
             bankName: bankName,
@@ -50,6 +52,17 @@ function SellerRegister() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
+
+                <div>
+                    <label>이름</label>
+                    <input
+                        type="text"
+                        value={sellerName}
+                        onChange={(e) => setSellerName(e.target.value)}
+                        placeholder="판매자 성함"
+                    />
+                </div>
+
                 <div>
                     <label>사업자 번호</label>
                     <input
@@ -97,6 +110,7 @@ function SellerRegister() {
 
             <div>
                 <label>예시)</label>
+                <p>홍길동</p>
                 <p>220-81-62517</p>
                 <p>KB국민은행</p>
                 <p>미래유통</p>

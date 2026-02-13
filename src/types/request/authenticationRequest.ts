@@ -1,3 +1,3 @@
 export interface AuthenticationRequest {
-	code: string;
+	authCode: string;
 }

@@ -1,4 +1,5 @@
 import type { ProductOptionInfo } from "../productOptionInfo";
+import type { ProductImageInfo } from "../ProductImageInfo";
 
 export interface AddProductRequest {
         name: string;
@@ -7,6 +8,6 @@ export interface AddProductRequest {
 		salePrice: number;
 		stock: number;
 		status: string;
-        options: ProductOptionInfo[];
-		images: any[];
+        options: ProductOptionInfo[]
+		images: ProductImageInfo[] | null;
 }

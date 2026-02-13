@@ -99,14 +99,13 @@ function ProductDetails() {
             orderType: "DIRECT"
         };
 
-        alert() // 이러면 씹힘 (시간차 때문에 -> 그래서 토스트 써서 js 딴으로)
+        // alert() -> 이러면 씹힐 때가 있음 (시간차 때문에 -> 그래서 토스트 사용해서 js로 구현)
         navigate("/payment", { state: orderParams });
     };
 
     if (loading) return <div>로딩 중...</div>;
     if (!product) return <div>상품 정보 없음</div>;
 
-    // 리덕스 -> 리코일 react 18 이상은 못씀.... (나중에 욕심이 있으면 -> 상태관리 라이브러리)
     return (
         <div>
             <h1>상품 상세 페이지</h1>
