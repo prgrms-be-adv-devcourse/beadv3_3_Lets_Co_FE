@@ -16,6 +16,10 @@ import Payment from "./pages/order/Payment";
 import Cart from "./pages/order/Cart";
 import Charge from "./pages/order/Charge";
 
+import CheckoutPage from "./pages/toss/CheckoutPage";
+import SuccessPage from "./pages/toss/SuccessPage";
+import FailPage from "./pages/toss/FailPage";
+
 function App() {
 
   return (
@@ -37,6 +41,9 @@ function App() {
         <Route path="/seller/check" element={<SellerCheck />} /> 
         <Route path="/seller/product/add" element={<AddProduct />} /> 
         <Route path="/cart" element={<Cart />} /> 
+        <Route path="/toss/checkout" element={<CheckoutPage />} /> 
+        <Route path="/toss/success" element={<SuccessPage />} />
+        <Route path="/toss/fail" element={<FailPage />} />
       </Routes>
 
     </div>
