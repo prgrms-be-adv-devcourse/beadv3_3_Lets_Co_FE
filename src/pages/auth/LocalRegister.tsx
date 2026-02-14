@@ -4,7 +4,7 @@ import { register } from "../../api/authApi";
 import type { RegisterRequest } from "../../types/request/registerRequest";
 import { GENDER_OPTIONS } from "../../types/genderStatus";
 
-function Register() {
+function LocalRegister() {
 
     const [username, setUsername] = useState('');
     const [mail, setMail] = useState('');
@@ -205,4 +205,4 @@ function Register() {
     );
 };
 
-export default Register;
+export default LocalRegister;

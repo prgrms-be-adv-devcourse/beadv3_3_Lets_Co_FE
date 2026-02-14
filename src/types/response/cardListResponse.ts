@@ -1,9 +1,9 @@
 export interface CardListResponse {
-    cardCode: string;
-    defaultCard: number;
-    cardBrand: string;
-    cardName: string;
-    cardToken: string;
-    expMonth: number;
-    expYear: number;
+    defaultCard: boolean
+    cardCode: string
+    cardBrand: string
+    cardName: string
+    cardToken: string
+    expMonth: number
+    expYear: number
 }

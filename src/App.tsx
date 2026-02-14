@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
-import Register from "./pages/auth/Register";
 import RegisterCheck from "./pages/auth/RegisterCheck";
 import Login from "./pages/auth/Login";
 import MyPage from "./pages/user/MyPage";
@@ -16,6 +15,14 @@ import Payment from "./pages/order/Payment";
 import Cart from "./pages/order/Cart";
 import Charge from "./pages/order/Charge";
 
+import CheckoutPage from "./pages/toss/CheckoutPage";
+import SuccessPage from "./pages/toss/SuccessPage";
+import FailPage from "./pages/toss/FailPage";
+import LocalRegister from "./pages/auth/LocalRegister";
+import OAuth2Register from "./pages/auth/OAuth2Register";
+import Address from "./pages/user/Address";
+import Card from "./pages/user/Card";
+
 function App() {
 
   return (
@@ -24,19 +31,35 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Register />} />
-        <Route path="/checkCode" element={<RegisterCheck />} />
-        <Route path="/products/:optionCode" element={<ProductDetails />} />
-        <Route path="/payment" element={<Payment />} />
+
+        {/* Auth */}
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<LocalRegister />} />
+        <Route path="/oauth2" element={<OAuth2Register />} />
+        <Route path="/checkCode" element={<RegisterCheck />} />
+
+        {/* User */}
         <Route path="/my" element={<MyPage />} /> 
         <Route path="/my/profile" element={<Profile />} /> 
-        <Route path="/charge" element={<Charge />} /> 
+        <Route path="/my/address" element={<Address />} />
+        <Route path="/my/card" element={<Card />} />        
+
+        {/* Seller */}
         <Route path="/seller" element={<Seller />} /> 
         <Route path="/seller/register" element={<SellerRegister />} /> 
         <Route path="/seller/check" element={<SellerCheck />} /> 
         <Route path="/seller/product/add" element={<AddProduct />} /> 
+
+        {/* Proudct */}
+        <Route path="/products/:optionCode" element={<ProductDetails />} />
+        <Route path="/payment" element={<Payment />} />
+
+        {/* Order/Payment */}
         <Route path="/cart" element={<Cart />} /> 
+        <Route path="/charge" element={<Charge />} /> 
+        <Route path="/toss/checkout" element={<CheckoutPage />} /> 
+        <Route path="/toss/success" element={<SuccessPage />} />
+        <Route path="/toss/fail" element={<FailPage />} />
       </Routes>
 
     </div>

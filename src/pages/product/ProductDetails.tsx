@@ -5,6 +5,9 @@ import { addCart } from "../../api/cartApi";
 import type { ProductDetailResponse } from "../../types/response/productDetailResponse";
 import type { ProductOptionInfo } from "../../types/productOptionInfo";
 import ProductOptionList from "../../components/ProductOptionList";
+import type { OrderRequest } from "../../types/request/orderRequest";
+import type { ProductRequest } from "../../types/request/productRequest";
+import { order } from "../../api/orderApi";
 
 function ProductDetails() {
     const { optionCode } = useParams<{ optionCode: string }>(); 
@@ -86,21 +89,44 @@ function ProductDetails() {
         }
     };
 
-    const handleBuyNow = (e: FormEvent) => {
+    // 주문 api
+    const handleBuyNow = async (e: FormEvent) => {
         e.preventDefault();
 
         const selection = getValidSelection();
         if (!selection) return;
 
-        const orderParams = {
-            productCode: selection.productCode,
-            optionCode: selection.optionCode,
-            quantity: selection.quantity,
-            orderType: "DIRECT"
-        };
 
-        // alert() -> 이러면 씹힐 때가 있음 (시간차 때문에 -> 그래서 토스트 사용해서 js로 구현)
-        navigate("/payment", { state: orderParams });
+        const productInfo: ProductRequest = {
+            productCode: selection.productCode,
+            optionCode: selectedOptionCode,
+            quantity: selection.quantity
+        }
+
+        const orderData: OrderRequest = {
+            orderType: "DIRECT",
+            productInfo: productInfo
+        }
+
+        try {
+            const response = await order(orderData);
+            const orderCode = response.data.orderCode;
+
+            navigate("/payment", { 
+                state: { 
+                    orderCode: orderCode,
+                    orderType: "DIRECT",
+                    productCode: selection.productCode,
+                    optionCode: selection.optionCode,
+                    quantity: selection.quantity
+                } 
+            });
+        } catch (error) {
+            console.log(error);
+            
+            alert(error);
+        }
+
     };
 
     if (loading) return <div>로딩 중...</div>;

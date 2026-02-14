@@ -33,4 +33,3 @@ export const getProduct = async (productCode: string) => {
 
     return response.data;
 }
-
