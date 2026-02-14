@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { CartItemResponse } from "../../types/response/cartItemResponse";
-import { getCarts } from "../../api/cartApi"; 
+import type { OrderRequest } from "../../types/request/orderRequest"; // 주문 요청 타입 추가
+import { getCarts } from "../../api/cartApi";
+import { order } from "../../api/orderApi"; // 주문 API 추가
 
 function Cart() {
     const [cartItem, setCartItem] = useState<CartItemResponse[]>([]);
@@ -30,18 +32,40 @@ function Cart() {
 
     const totalAmount = cartItem.reduce((acc, cur) => acc + cur.amount, 0);
 
-    const handleOrder = () => {
+    const handleOrder = async () => {
         if (cartItem.length === 0) {
             alert("주문할 상품이 없습니다.");
             return;
         }
 
-        navigate("/payment", { 
-            state: { 
-                orderType: "CART", 
-                cartItems: cartItem
-            } 
-        });
+        const orderData: OrderRequest = {
+            orderType: "CART",
+            productInfo: null
+        };
+
+        try {
+            const response = await order(orderData);
+
+            const orderCode = response.data.orderCode;
+
+            if (!orderCode) {
+                console.error("주문 번호 누락:", response);
+                alert("주문 처리에 실패했습니다. (주문 번호 없음)");
+                return;
+            }
+
+            navigate("/payment", { 
+                state: { 
+                    orderCode: orderCode,
+                    orderType: "CART", 
+                    cartItems: cartItem 
+                } 
+            });
+
+        } catch (error) {
+            console.error("주문 생성 실패", error);
+            alert("주문 생성 중 오류가 발생했습니다.");
+        }
     };
 
     if (loading) return <div>로딩중...</div>;

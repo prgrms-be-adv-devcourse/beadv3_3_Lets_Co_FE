@@ -5,6 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
 
+    // todo. 추후 환경 변수로 관리
+    const BACKEND_URL = "http://localhost:8000";
+
+
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');    
 
@@ -60,6 +64,17 @@ function Login() {
                 <button type="submit">로그인</button>
                 <Link to={"/signup"}>회원가입</Link>
             </form>
+            <hr/>
+
+            <div>
+                <a href={`${BACKEND_URL}/oauth2/authorization/naver`}>네이버 로그인</a>
+            </div>
+            <div>
+                <a href={`${BACKEND_URL}/oauth2/authorization/google`}>구글 로그인</a>
+            </div>
+            <div>
+                <a href={`${BACKEND_URL}/oauth2/authorization/kakao`}>카카오 로그인</a>
+            </div>
         </div>
     );
 };

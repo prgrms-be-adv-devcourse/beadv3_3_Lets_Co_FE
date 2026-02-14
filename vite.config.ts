@@ -8,7 +8,7 @@ export default defineConfig({
         changeOrigin: true
       },
 
-      '/user': {
+      '/users': {
         target: "http://localhost:8000",
         changeOrigin: true
       },
@@ -34,6 +34,11 @@ export default defineConfig({
       },
 
       '/payments': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
+      '/oauth2': {
         target: "http://localhost:8000",
         changeOrigin: true
       }

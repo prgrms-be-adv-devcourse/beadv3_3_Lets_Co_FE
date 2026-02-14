@@ -1,6 +1,7 @@
-export interface UserAddressRequest {
+
+export interface AddressResponse {
+    defaultAddress: boolean;
     addressCode: string;
-    defaultAddress: number;
     recipient: string;
     address: string;
     addressDetail: string;
