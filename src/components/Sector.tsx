@@ -6,6 +6,7 @@ function Sector() {
         <div>
             <Link to='/seller/register'>판매자 신청</Link> <br/>
             <Link to='/seller'>판매자 페이지</Link> <br/>
+            <Link to='/admin'>관리자 페이지</Link> <br/>
             <Link to='/cart'>장바구니 페이지</Link> <br/>
             <Link to='/board'>게시판 페이지</Link> <br/>
         </div>

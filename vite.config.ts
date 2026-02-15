@@ -18,6 +18,11 @@ export default defineConfig({
         changeOrigin: true
       },
 
+      '/admin': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
       '/products': {
         target: "http://localhost:8000",
         changeOrigin: true

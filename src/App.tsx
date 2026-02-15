@@ -22,6 +22,11 @@ import LocalRegister from "./pages/auth/LocalRegister";
 import OAuth2Register from "./pages/auth/OAuth2Register";
 import Address from "./pages/user/Address";
 import Card from "./pages/user/Card";
+import Admin from "./pages/admin/Admin";
+import ManageProduct from "./pages/admin/ManageProduct";
+import ManageBoard from "./pages/admin/ManageBoard";
+import ManageUser from "./pages/admin/ManageUser";
+import ManageUserDetails from "./pages/admin/ManageUserDetails";
 
 function App() {
 
@@ -49,6 +54,13 @@ function App() {
         <Route path="/seller/register" element={<SellerRegister />} /> 
         <Route path="/seller/check" element={<SellerCheck />} /> 
         <Route path="/seller/product/add" element={<AddProduct />} /> 
+
+        {/* Admin */}
+        <Route path="/admin" element={<Admin />} /> 
+        <Route path="/admin/users" element={<ManageUser />} /> 
+        <Route path="/admin/users/:id" element={<ManageUserDetails />} /> 
+        <Route path="/admin/product" element={<ManageProduct />} /> 
+        <Route path="/admin/board" element={<ManageBoard />} /> 
 
         {/* Proudct */}
         <Route path="/products/:optionCode" element={<ProductDetails />} />

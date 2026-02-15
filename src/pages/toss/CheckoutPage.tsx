@@ -2,7 +2,7 @@ import { loadTossPayments, type TossPaymentsWidgets } from "@tosspayments/tosspa
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// 본인의 클라이언트 키로 교체하세요
+// 테스트용 키
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 const customerKey = "quLU1MI83FWEP8cbj9WOX";
 
@@ -16,7 +16,6 @@ export function CheckoutPage() {
     orderId: string;
     orderName: string;
     customerName: string;
-    customerEmail: string;
   } | null;
 
   const [ready, setReady] = useState<boolean>(false);
@@ -100,7 +99,6 @@ export function CheckoutPage() {
                   orderName: state.orderName,
                   successUrl: window.location.origin + "/toss/success",
                   failUrl: window.location.origin + "/toss/fail",
-                  customerEmail: state.customerEmail,
                   customerName: state.customerName,
                 });
               } catch (error) {

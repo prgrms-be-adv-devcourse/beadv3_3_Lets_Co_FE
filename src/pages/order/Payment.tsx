@@ -21,7 +21,7 @@ interface OrderItemView {
 // location.state 타입 정의
 interface PaymentStateParams {
   orderType: "DIRECT" | "CART";
-  orderCode: string; 
+  orderCode: string;
   // DIRECT
   productCode?: string;
   optionCode?: string;
@@ -53,7 +53,7 @@ function Payment() {
   const [cardBrand, setCardBrand] = useState("VISA");
   const [expMonth, setExpMonth] = useState("");
   const [expYear, setExpYear] = useState("");
-  const [cardToken] = useState(""); 
+  const [cardToken] = useState("");
 
   useEffect(() => {
     if (!stateParams || !stateParams.orderCode) {
@@ -114,20 +114,21 @@ function Payment() {
     fetchOrderData();
   }, [stateParams, navigate]);
 
-  const finalTotalPrice = orderList.reduce((acc, cur) => acc + cur.totalPrice, 0);
+  const totalPrice = orderList.reduce((acc, cur) => acc + cur.totalPrice, 0);
 
   const handlePayment = async () => {
-    // 1. 유효성 검사
     if (!stateParams?.orderCode) {
       alert("주문 번호가 유효하지 않습니다.");
       return;
     }
 
+    // 배송지 정보
     if (!recipient || !address || !phone) {
       alert("배송지 정보를 모두 입력해주세요.");
       return;
     }
 
+    // 카드 결제 유효성 검사
     if (paymentType === "CARD") {
       if (!cardName || !expMonth || !expYear) {
         alert("카드 정보를 입력해주세요.");
@@ -135,25 +136,35 @@ function Payment() {
       }
     }
 
-    // 2. 토스 페이먼츠 이동 로직
+    // 토스 페이먼츠 (백엔드 API 호출 안 함, 페이지 이동)
     if (paymentType === "TOSS_PAY") {
       const orderName = orderList.length > 1
         ? `${orderList[0].productName} 외 ${orderList.length - 1}건`
         : orderList[0].productName;
 
+      // 주소 정보를 세션 스토리지에 임시 저장 (리다이렉트 후 복구용)
+      const tempAddressInfo: AddressInfo = {
+        recipient,
+        address,
+        addressDetail,
+        phone
+      };
+      sessionStorage.setItem("temp_order_address", JSON.stringify(tempAddressInfo));
+
+      // 토스 결제 위젯 페이지로 이동
       navigate("/toss/checkout", {
         state: {
-          amount: finalTotalPrice,
-          orderId: stateParams.orderCode, 
+          amount: totalPrice,
+          orderId: stateParams.orderCode,
           orderName: orderName,
-          customerName: recipient,
-          customerEmail: "test@example.com", 
+          customerName: recipient
         }
       });
-      return;
+
+      return; 
     }
 
-    // 3. 일반 결제(CARD, DEPOSIT) 데이터 조립
+    // 일반 결제(CARD, DEPOSIT) (백엔드 API 호출)    
     const addressInfo: AddressInfo = {
       recipient,
       address,
@@ -166,7 +177,7 @@ function Payment() {
       cardInfo = {
         cardBrand,
         cardName,
-        cardToken, 
+        cardToken,
         expMonth: Number(expMonth),
         expYear: Number(expYear)
       };
@@ -177,19 +188,18 @@ function Payment() {
       cardInfo
     };
 
-    // Request 객체 생성
     const paymentData: PaymentRequest = {
       orderCode: stateParams.orderCode,
       userInfo: userInfo,
       paymentType: paymentType,
-      amount: finalTotalPrice,
-      tossKey: null
+      amount: totalPrice,
+      tossKey: null // 일반 결제는 tossKey 없음
     };
 
     try {
-      console.log("결제 요청 데이터:", paymentData);
+      console.log("일반 결제 요청 데이터:", paymentData);
       await payment(paymentData);
-      
+
       alert("주문이 완료되었습니다!");
       navigate("/my/order");
     } catch (error) {
@@ -204,25 +214,25 @@ function Payment() {
   return (
     <div>
       <h1>주문 / 결제</h1>
-      
+
       <div>
         <h3>주문 상품 목록</h3>
         {orderList.map((item, index) => (
-          <div key={index} style={{ marginBottom: "10px", borderBottom: "1px solid #eee" }}>
+          <div key={index}>
             <p><strong>{item.productName}</strong></p>
             <p>옵션: {item.optionName} / 수량: {item.quantity}개</p>
             <p>금액: {item.totalPrice.toLocaleString()}원</p>
           </div>
         ))}
-        <div style={{ marginTop: "15px", fontSize: "1.2em" }}>
-          <strong>총 결제 금액: {finalTotalPrice.toLocaleString()}원</strong>
+        <div>
+          <strong>총 결제 금액: {totalPrice.toLocaleString()}원</strong>
         </div>
       </div>
 
       <hr />
 
       <h3>배송지 정보</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: "5px", maxWidth: "400px" }}>
+      <div>
         <input placeholder="받는 분 성함" value={recipient} onChange={e => setRecipient(e.target.value)} />
         <input placeholder="전화번호 (010-0000-0000)" value={phone} onChange={e => setPhone(e.target.value)} />
         <input placeholder="주소" value={address} onChange={e => setAddress(e.target.value)} />
@@ -232,40 +242,40 @@ function Payment() {
       <hr />
 
       <h3>결제 수단</h3>
-      <div style={{ display: "flex", gap: "15px" }}>
+      <div>
         <label>
-          <input type="radio" name="payType" checked={paymentType === "CARD"} onChange={() => setPaymentType("CARD")} /> 
+          <input type="radio" name="payType" checked={paymentType === "CARD"} onChange={() => setPaymentType("CARD")} />
           카드 결제
         </label>
         <label>
-          <input type="radio" name="payType" checked={paymentType === "DEPOSIT"} onChange={() => setPaymentType("DEPOSIT")} /> 
+          <input type="radio" name="payType" checked={paymentType === "DEPOSIT"} onChange={() => setPaymentType("DEPOSIT")} />
           예치금 결제
         </label>
         <label>
-          <input type="radio" name="payType" checked={paymentType === "TOSS_PAY"} onChange={() => setPaymentType("TOSS_PAY")} /> 
+          <input type="radio" name="payType" checked={paymentType === "TOSS_PAY"} onChange={() => setPaymentType("TOSS_PAY")} />
           토스 결제
         </label>
       </div>
 
-      <div style={{ marginTop: "20px", padding: "10px", border: "1px solid #ddd" }}>
+      <div>
         {paymentType === "CARD" && (
           <div>
             <h4>카드 정보 입력</h4>
-            <input placeholder="카드 소유주" value={cardName} onChange={e => setCardName(e.target.value)} style={{ marginRight: "5px" }} />
+            <input placeholder="카드 소유주" value={cardName} onChange={e => setCardName(e.target.value)} />
             <select value={cardBrand} onChange={e => setCardBrand(e.target.value)}>
               <option value="VISA">VISA</option>
               <option value="MASTERCARD">MasterCard</option>
             </select>
-            <div style={{ marginTop: "5px" }}>
-              <input placeholder="MM" value={expMonth} onChange={e => setExpMonth(e.target.value)} maxLength={2} style={{ width: "50px", marginRight: "5px" }} />
-              <input placeholder="YYYY" value={expYear} onChange={e => setExpYear(e.target.value)} maxLength={4} style={{ width: "70px" }} />
+            <div>
+              <input placeholder="MM" value={expMonth} onChange={e => setExpMonth(e.target.value)} maxLength={2} />
+              <input placeholder="YYYY" value={expYear} onChange={e => setExpYear(e.target.value)} maxLength={4} />
             </div>
           </div>
         )}
 
         {paymentType === "DEPOSIT" && (
           <div>
-            <p>보유하신 예치금에서 <strong>{finalTotalPrice.toLocaleString()}원</strong>이 즉시 차감됩니다.</p>
+            <p>보유하신 예치금에서 <strong>{totalPrice.toLocaleString()}원</strong>이 즉시 차감됩니다.</p>
           </div>
         )}
 
@@ -276,11 +286,8 @@ function Payment() {
         )}
       </div>
 
-      <button 
-        onClick={handlePayment} 
-        style={{ marginTop: "30px", padding: "15px 30px", fontSize: "1.1em", cursor: "pointer", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "5px" }}
-      >
-        {finalTotalPrice.toLocaleString()}원 결제하기
+      <button onClick={handlePayment}>
+        {totalPrice.toLocaleString()}원 결제하기
       </button>
     </div>
   );
