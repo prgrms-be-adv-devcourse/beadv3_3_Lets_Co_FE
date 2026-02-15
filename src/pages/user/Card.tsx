@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { addCard, deleteCard, getCard, updateCard } from "../../api/userApi"; 
 import type { UpsertCardRequest } from "../../types/request/upsertCardRequest";
 import type { DeleteCardRequest } from "../../types/request/deleteCardRequest";
-import type { CardListResponse } from "../../types/response/cardListResponse";
+import type { CardResponse } from "../../types/response/cardResponse";
 
 function Card() {
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [cardList, setCardList] = useState<CardListResponse[]>([]);
+    const [cardList, setCardList] = useState<CardResponse[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
 
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -61,7 +61,7 @@ function Card() {
     };
 
     // [기능] 수정 모드 진입
-    const startEditing = (card: CardListResponse) => {
+    const startEditing = (card: CardResponse) => {
         setEditingId(card.cardCode);
         setEditFormData({
             cardBrand: card.cardBrand,

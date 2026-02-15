@@ -1,4 +1,4 @@
-export interface CardListResponse {
+export interface CardResponse {
     defaultCard: boolean
     cardCode: string
     cardBrand: string

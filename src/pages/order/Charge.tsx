@@ -7,6 +7,7 @@ function Charge() {
 
     const [amount, setAmout] = useState(0);
     const [paymentType, setPaymentType] = useState<"CARD" | "TOSS_PAY">("CARD");
+    
     const [cardName, setCardName] = useState("");
     const [cardBrand, setCardBrand] = useState("VISA");
     const [expMonth, setExpMonth] = useState("");
@@ -16,9 +17,30 @@ function Charge() {
     const navigate = useNavigate();
 
     const submitHandeler = async (e: FormEvent) => {
-        
         e.preventDefault();
         
+        if (amount <= 0) {
+            alert("충전할 금액을 올바르게 입력해주세요.");
+            return;
+        }
+
+/*
+        if (paymentType === "TOSS_PAY") {
+            const randomOrderId = `charge_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+
+            navigate("/toss/checkout", {
+                state: {
+                    amount: amount,
+                    orderId: randomOrderId, 
+                    orderName: "예치금 충전",
+                    customerName: "충전 사용자",
+                    customerEmail: "test@example.com",
+                }
+            });
+            return;
+        }
+*/
+
         const chargeData: ChargeRequest = {
             amount: amount,
             paymentType: paymentType
@@ -51,8 +73,7 @@ function Charge() {
                     />
                 </div>
 
-
-                <h3>결제 수단</h3>
+                <h3>카드로 충전합니다.</h3>
                 <div>
                     <label>
                         <input 
@@ -62,6 +83,7 @@ function Charge() {
                             onChange={() => setPaymentType("CARD")} 
                         /> 카드 결제
                     </label>
+{/* 
                     <label>
                         <input 
                             type="radio" 
@@ -69,7 +91,8 @@ function Charge() {
                             checked={paymentType === "TOSS_PAY"} 
                             onChange={() => setPaymentType("TOSS_PAY")} 
                         /> 토스 결제
-                    </label>
+                    </label> 
+*/}
                 </div>
 
                 {paymentType === "CARD" && (
@@ -86,18 +109,17 @@ function Charge() {
                         </div>
                     </div>
                 )}
-
+{/* 
                 {paymentType === "TOSS_PAY" && (
-                    <div>
-                        <p>토스 페이먼츠로 충전합니다.</p>
-                    </div>
-                )}
-
+                <div>
+                    <p>충전 버튼을 누르면 <strong>토스 페이먼츠</strong> 화면으로 이동합니다.</p>
+                </div>
+                )} 
+*/}
                 <button type="submit">충전</button>
             </form>
         </div>
     );
 }
-
 
 export default Charge;
