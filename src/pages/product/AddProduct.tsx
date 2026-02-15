@@ -2,21 +2,24 @@ import { useState, type FormEvent } from "react";
 import AddProductOption from "../../components/AddProductOption";
 import type { ProductOptionInfo } from "../../types/productOptionInfo"; 
 import { useNavigate } from "react-router-dom";
-import type { AddProductRequest } from "../../types/request/addProductRequest";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
 import { addProduct } from "../../api/productApi";
-import type { ProductImageInfo } from "../../types/ProductImageInfo";
+import type { UpsertProductRequest } from "../../types/request/upsertProductRequest";
+import ImageUpload from "../../components/ImpageUpload";
 
 function AddProduct () {
 
+    const navigate = useNavigate();
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
     const [salePrice, setSalePrice] = useState(0);
     const [productStatus, setProductStatus] = useState('ON_SALE');
-    
-    const navigate = useNavigate();
-    
+    const [categoryStatus, setCategoryStatus] = useState('');
+    const [ipStatus, setIpStatus] = useState('');
+
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
     const [options, setOptions] = useState<ProductOptionInfo[]>([
         {
             code: '',
@@ -29,14 +32,9 @@ function AddProduct () {
         }
     ]);
 
-    const [images, setImages] = useState<ProductImageInfo[]>([
-        {
-            imageIdx: null,
-            url: '',
-            sortOrder: 0,
-            isThumbnail: false
-        }
-    ])
+    const handleImageSelect = (files: File[]) => {
+        setSelectedImages(files);
+    };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -46,19 +44,20 @@ function AddProduct () {
             return;
         }
 
-        const productData: AddProductRequest = {
+        const productData: UpsertProductRequest = {
             name: productName,
             description: description,
             price: price,
             salePrice: salePrice,
             stock: 0,
             status: productStatus,
-            options: options,
-            images: null
+            categoryCode: categoryStatus,
+            ipCode: ipStatus,
+            options: options
         }
 
         try {
-            await addProduct(productData);
+            await addProduct(productData, selectedImages);
             alert("상품이 정상적으로 등록되었습니다.");
             navigate('/seller');
         } catch (error) {
@@ -116,7 +115,7 @@ function AddProduct () {
                 </div>
                 
                 <div>
-                    <label>상태:</label>
+                    <label>제품 상태:</label>
                     <select
                         value={productStatus}
                         onChange={(e) => setProductStatus(e.target.value)}
@@ -127,14 +126,36 @@ function AddProduct () {
                             </option>
                         ))}
                     </select>
-                </div>                                    
+                </div>     
+                
+{/* 
+                <div>
+                    <label>카테고리</label>
+                    <select
+                        value={categoryStatus}
+                        onChange={(e) => setCategoryStatus(e.target.value)}
+                    >
+                    </select>
+                </div>
+
+                <div>
+                    <label>아이피</label>
+                    <select
+                        value={ipStatus}
+                        onChange={(e) => setIpStatus(e.target.value)}
+                    >
+                    </select>
+                </div>
+ */}
+
+                <ImageUpload onFilesSelected={handleImageSelect} />
 
                 <hr/>
                 
                 <AddProductOption 
                     options={options} 
                     setOptions={setOptions}
-                />
+                />                
 
                 <button type="submit">등록</button>
             </form>

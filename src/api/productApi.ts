@@ -1,16 +1,33 @@
-import type { AddProductRequest } from "../types/request/addProductRequest";
+import type { UpsertProductRequest } from "../types/request/upsertProductRequest";
 import type { ProductDetailResponse } from "../types/response/productDetailResponse";
 import type { ProductResponse } from "../types/response/productResponse";
 import client from "./client";
 
 const BASE_URL = "/products";
 
-export const addProduct =
-    async (productData: AddProductRequest) => {
-        const response = await client.post('/seller/products', productData);
-        console.log(response.data);
+export const addProduct = async (productData: UpsertProductRequest, images: File[]) => {
+    const formData = new FormData();
 
-        return response.data;
+    const json = JSON.stringify(productData);
+    const blob = new Blob([json], { type: "application/json" });
+    formData.append("request", blob);
+
+    images.forEach((image) => {
+        formData.append("images", image);
+    });
+
+    const response = await client.post(
+        '/seller/products', 
+        formData, 
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+
+    console.log(response.data);
+    return response.data;
 };
 
 export const getProducts = async (search: string, page: number = 0, size: number = 5) => {
