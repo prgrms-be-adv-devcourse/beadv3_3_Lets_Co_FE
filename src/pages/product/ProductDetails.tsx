@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProduct } from "../../api/productApi";
 import { addCart } from "../../api/cartApi";
-import type { ProductDetailResponse } from "../../types/response/productDetailResponse";
+import type { ProductDetailsResponse } from "../../types/response/productDetailsResponse";
 import type { ProductOptionInfo } from "../../types/productOptionInfo";
 import ProductOptionList from "../../components/ProductOptionList";
 import type { OrderRequest } from "../../types/request/orderRequest";
@@ -13,7 +13,7 @@ function ProductDetails() {
     const { optionCode } = useParams<{ optionCode: string }>(); 
     const navigate = useNavigate();
 
-    const [product, setProduct] = useState<ProductDetailResponse | null>(null);
+    const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     const [selectedOptionCode, setSelectedOptionCode] = useState<string>("");

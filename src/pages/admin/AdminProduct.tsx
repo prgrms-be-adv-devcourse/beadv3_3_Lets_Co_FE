@@ -1,5 +1,5 @@
 
-function ManageProduct() {
+function AdminProduct() {
 
     return (
         <div>
@@ -8,4 +8,4 @@ function ManageProduct() {
     );
 }
 
-export default ManageProduct;
+export default AdminProduct;

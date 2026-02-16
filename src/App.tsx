@@ -9,7 +9,7 @@ import Profile from "./pages/user/Profile";
 import Seller from "./pages/seller/Seller";
 import SellerRegister from "./pages/seller/SellerRegister";
 import SellerCheck from "./pages/seller/SellerCheck";
-import AddProduct from "./pages/product/AddProduct";
+import AddProduct from "./pages/seller/AddProduct";
 import ProductDetails from "./pages/product/ProductDetails";
 import Payment from "./pages/order/Payment";
 import Cart from "./pages/order/Cart";
@@ -23,8 +23,8 @@ import OAuth2Register from "./pages/auth/OAuth2Register";
 import Address from "./pages/user/Address";
 import Card from "./pages/user/Card";
 import Admin from "./pages/admin/Admin";
-import ManageProduct from "./pages/admin/ManageProduct";
-import ManageBoard from "./pages/admin/ManageBoard";
+import AdminProduct from "./pages/admin/AdminProduct";
+import AdminBoard from "./pages/admin/AdminBoard";
 import ManageUser from "./pages/admin/ManageUser";
 import ManageUserDetails from "./pages/admin/ManageUserDetails";
 
@@ -59,8 +59,8 @@ function App() {
         <Route path="/admin" element={<Admin />} /> 
         <Route path="/admin/users" element={<ManageUser />} /> 
         <Route path="/admin/users/:id" element={<ManageUserDetails />} /> 
-        <Route path="/admin/product" element={<ManageProduct />} /> 
-        <Route path="/admin/board" element={<ManageBoard />} /> 
+        <Route path="/admin/product" element={<AdminProduct />} /> 
+        <Route path="/admin/board" element={<AdminBoard />} /> 
 
         {/* Proudct */}
         <Route path="/products/:optionCode" element={<ProductDetails />} />

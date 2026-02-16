@@ -1,5 +1,5 @@
 
-function ManageBoard() {
+function AdminBoard() {
 
     return (
         <div>
@@ -9,4 +9,4 @@ function ManageBoard() {
     );
 }
 
-export default ManageBoard;
+export default AdminBoard;

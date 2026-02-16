@@ -64,8 +64,9 @@ function MyPage() {
             </div>
 
             <Link to='/my/profile'>내 정보</Link> <br/>
+            <Link to='/my/address'>주소 정보</Link> <br/>
             <Link to='/my/card'>카드 정보</Link> <br/>
-            <Link to='/my/address'>주소 정보</Link>
+            <Link to='/my/order'>주문 정보</Link>
         </div>
     );
 }
