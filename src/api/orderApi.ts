@@ -11,15 +11,21 @@ export const order =
         return response.data;
     }
 
-export const getOrders =
-    async() => {
-        const response = await client.get(BASE_URL);
-        console.log(response.data);
+export const getOrderList = 
+    async (keyword: string, page: number, size: number) => {
+        const response = await client.get(BASE_URL, {
+            params: {
+                page: page,
+                size: size,
+                keyword: keyword 
+            }
+        });
+        console.log("전체 응답:", response.data);
 
-        return response.data;
+        return response.data; 
     }
 
-export const getOrder =
+export const getOrderDetails =
     async(orderCode: string) => {
         const response = await client.get(`${BASE_URL}/${orderCode}`);
         console.log(response.data);

@@ -4,6 +4,14 @@ import type { PaymentRequest } from "../types/request/paymentRequest";
 
 const BASE_URL = "/payments";
 
+export const payment = 
+    async(paymentData: PaymentRequest) => {
+        const result = await client.post(`${BASE_URL}/process`, paymentData);
+        console.log(result.data);
+    
+    return result.data;
+}
+
 export const charge = 
     async(chargeData: ChargeRequest) => {
         const result = await client.post(`${BASE_URL}/charge`, chargeData);
@@ -12,10 +20,10 @@ export const charge =
         return result.data;
     }
 
-export const payment = 
-    async(paymentData: PaymentRequest) => {
-        const result = await client.post(`${BASE_URL}/process`, paymentData);
-        console.log(result.data);
-    
-    return result.data;
-}
+export const refund =
+    async(orderCode: string) => {
+        const restult = await client.post(`${BASE_URL}/refund/${orderCode}`);
+        console.log(restult.data);
+
+        return restult.data;
+    }

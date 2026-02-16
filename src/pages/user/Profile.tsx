@@ -57,7 +57,7 @@ function Profile() {
                     <span>{userProfile.grade}</span>
                 </div>
             </div>
-
+            
             <Link to="/my">마이페이지</Link>
         </div>
     );
