@@ -3,7 +3,7 @@ import AddProductOption from "../../components/AddProductOption";
 import type { ProductOptionInfo } from "../../types/productOptionInfo"; 
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
-import { addProduct } from "../../api/productApi";
+import { addProduct } from "../../api/sellerApi";
 import type { UpsertProductRequest } from "../../types/request/upsertProductRequest";
 import ImageUpload from "../../components/ImpageUpload";
 

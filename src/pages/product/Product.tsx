@@ -6,8 +6,7 @@ import type { ProductInfo } from "../../types/productInfo";
 
 export default function Product() {
 
-    // 여기에 함수를 변수로 선언해서 넣을 수 있음 (이벤트 헨들러) 
-    // 코드가 길어질 때 인라인 함수보다는 따로 변수를 선언해서 따로 대입해서 사용하는것이 코드가 더 보기 수월해짐 (가독성)
+    // 여기에 함수를 변수로 선언해서 넣을 수 있음 (이벤트 헨들러)
     const prev = () => { 
         // 여기에 코드를 작성
         setPage((prev) => Math.max(0, prev - 1))

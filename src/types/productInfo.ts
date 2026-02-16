@@ -4,4 +4,7 @@ export interface ProductInfo {
     price: number;
     salePrice: number;
     viewCount: number;
+    status: string;
+    category: string[];
+    imageUrl: string;
 }

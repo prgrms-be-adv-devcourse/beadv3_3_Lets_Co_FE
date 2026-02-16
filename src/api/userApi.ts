@@ -50,10 +50,10 @@ export const deleteAddress =
     }
 
 export const getCard =
-async () => {
-    const response = await client.post(`${BASE_URL}/card/list`);
-    return response.data;
-};
+    async () => {
+        const response = await client.post(`${BASE_URL}/card/list`);
+        return response.data;
+    };
 
 export const addCard = 
     async (addData: UpsertCardRequest) => {

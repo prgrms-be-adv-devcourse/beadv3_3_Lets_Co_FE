@@ -1,6 +1,6 @@
 import type { ProductOptionInfo } from "../productOptionInfo";
 
-export interface ProductDetailResponse {
+export interface ProductDetailsResponse {
     productsCode: string;
     name: string;
     description: string;
