@@ -1,4 +1,5 @@
 import type { LockedUntilRequest } from "../types/request/lockedUntilRequest";
+import type { UpsertInquiryAnswerRequest } from "../types/request/upsertInquiryAnswerRequest";
 import type { UpsertNoticeRequest } from "../types/request/upsertNoticeRequest";
 import client from "./client";
 
@@ -46,6 +47,30 @@ export const deleteUser = async (username: string) => {
 export const addNotice = 
     async(addData: UpsertNoticeRequest) =>  {
         const response = await client.post(`${BASE_URL}/notice`, addData);
+        console.log(response.data);
+
+        return response.data;
+    }    
+
+export const updateNotice = 
+    async(noticeCode: string, updateData: UpsertNoticeRequest) =>  {
+        const response = await client.put(`${BASE_URL}/notice/${noticeCode}`, updateData);
+        console.log(response.data);
+
+        return response.data;
+    }    
+
+export const deleteNotice = 
+    async(noticeCode: string) =>  {
+        const response = await client.delete(`${BASE_URL}/notice/${noticeCode}`);
+        console.log(response.data);
+
+        return response.data;
+    }
+
+export const answerInquiry = 
+    async(inquiryCode: string, answerData: UpsertInquiryAnswerRequest) =>  {
+        const response = await client.post(`${BASE_URL}/inquiry/${inquiryCode}`, answerData);
         console.log(response.data);
 
         return response.data;

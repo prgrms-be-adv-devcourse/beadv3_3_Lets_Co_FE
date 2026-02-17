@@ -31,6 +31,9 @@ import Notice from "./pages/board/Notice";
 import Board from "./pages/board/Board";
 import AddNotice from "./pages/board/AddNotice";
 import NoticeDetails from "./pages/board/NoticeDetails";
+import Inquiry from "./pages/board/Inquiry";
+import InquiryDetails from "./pages/board/InquiryDetails";
+import AddInquiry from "./pages/board/AddInquiry";
 
 function App() {
 
@@ -79,10 +82,15 @@ function App() {
 
         {/* Board (Notice/inquiry/QnA) */}
         <Route path="/board" element={<Board />} /> 
+        
         <Route path="/board/notice" element={<Notice />} /> 
-        <Route path="/board/notice/add" element={<AddNotice />} /> 
         <Route path="/board/notice/:noticeCode" element={<NoticeDetails />} /> 
-        {/* <Route path="/board/inquiry" element={<Inquiry />} />  */}
+        <Route path="/board/notice/add" element={<AddNotice />} /> 
+
+        <Route path="/board/inquiry" element={<Inquiry />} />  
+        <Route path="/board/inquiry/:inquiryCode" element={<InquiryDetails />} />  
+        <Route path="/board/inquiry/add" element={<AddInquiry />} />  
+
         {/* <Route path="/board/QnA" element={<QnA />} />  */}
       </Routes>
 
