@@ -27,6 +27,10 @@ import AdminProduct from "./pages/admin/AdminProduct";
 import AdminBoard from "./pages/admin/AdminBoard";
 import ManageUser from "./pages/admin/ManageUser";
 import ManageUserDetails from "./pages/admin/ManageUserDetails";
+import Notice from "./pages/board/Notice";
+import Board from "./pages/board/Board";
+import AddNotice from "./pages/board/AddNotice";
+import NoticeDetails from "./pages/board/NoticeDetails";
 
 function App() {
 
@@ -72,6 +76,14 @@ function App() {
         <Route path="/toss/checkout" element={<CheckoutPage />} /> 
         <Route path="/toss/success" element={<SuccessPage />} />
         <Route path="/toss/fail" element={<FailPage />} />
+
+        {/* Board (Notice/inquiry/QnA) */}
+        <Route path="/board" element={<Board />} /> 
+        <Route path="/board/notice" element={<Notice />} /> 
+        <Route path="/board/notice/add" element={<AddNotice />} /> 
+        <Route path="/board/notice/:noticeCode" element={<NoticeDetails />} /> 
+        {/* <Route path="/board/inquiry" element={<Inquiry />} />  */}
+        {/* <Route path="/board/QnA" element={<QnA />} />  */}
       </Routes>
 
     </div>

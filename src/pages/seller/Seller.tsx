@@ -7,6 +7,7 @@ function Seller() {
             <h1>판매자 페이지</h1>
             <Link to='/seller/product/add'>상품 등록</Link> <br/>
             <Link to='/seller/product/list'>제품 관리 페이지</Link> <br/>
+            <Link to='/seller/board/qna'>판매자 QnA 페이지</Link>
         </div>
     );
 }
