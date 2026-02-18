@@ -1,6 +1,7 @@
 import type { AuthenticationRequest } from "../types/request/authenticationRequest";
 import type { SellerRegisterRequest } from "../types/request/sellerRegisterRequest";
 import type { UpsertProductRequest } from "../types/request/upsertProductRequest";
+import type { UpsertSellerQnARequest } from "../types/request/upsertSellerQnARequest";
 import client from "./client"
 
 const BASE_URL = '/seller'
@@ -92,7 +93,27 @@ export const updateSellerProduct = async (code: string, productData: UpsertProdu
     return response.data;
 };
 
-export const deleteSellerProduct = async (code: string) => {
+export const deleteSellerProduct = async(code: string) => {
     const response = await client.delete(`${BASE_URL}/products/${code}`);
     return response.data;
 };
+
+
+export const getSellerQnAList = async(page: number, size: number) => {
+    const response = await client.get(`${BASE_URL}/qna`, {
+            params: {
+                page: page,
+                size: size,
+            }
+    });
+    console.log(response.data);
+
+    return response.data;
+}
+
+export const addSellerQnA = async(pqnaCode: string, addData: UpsertSellerQnARequest) => {
+    const response = await client.post(`${BASE_URL}/qna/${pqnaCode}`, addData)
+    console.log(response.data);
+
+    return response.data;
+}
