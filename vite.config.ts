@@ -46,6 +46,21 @@ export default defineConfig({
       '/oauth2': {
         target: "http://localhost:8000",
         changeOrigin: true
+      },
+
+      '/notice': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
+      '/inquiry': {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      },
+
+      '/qna': {
+        target: "http://localhost:8000",
+        changeOrigin: true
       }
     }
   }
