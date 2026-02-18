@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getInquiryDetails, deleteInquiry } from "../../api/inquiryApi";
 import type { InquiryDetailsResponse } from "../../types/response/inquiryDetailsResponse";
-import InquiryAnswer from "./InquiryAnswer";
+import InquiryAnswer from "../admin/InquiryAnswer";
 import AddInquiryAnswer from "./AddInquiryAnswer";
 
 function InquiryDetails() {

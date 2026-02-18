@@ -8,6 +8,7 @@ import ProductOptionList from "../../components/ProductOptionList";
 import type { OrderRequest } from "../../types/request/orderRequest";
 import type { ProductRequest } from "../../types/request/productRequest";
 import { order } from "../../api/orderApi";
+import QnA from "../board/QnA";
 
 function ProductDetails() {
     const { optionCode } = useParams<{ optionCode: string }>(); 
@@ -89,13 +90,11 @@ function ProductDetails() {
         }
     };
 
-    // 주문 api
     const handleBuyNow = async (e: FormEvent) => {
         e.preventDefault();
 
         const selection = getValidSelection();
         if (!selection) return;
-
 
         const productInfo: ProductRequest = {
             productCode: selection.productCode,
@@ -123,10 +122,8 @@ function ProductDetails() {
             });
         } catch (error) {
             console.log(error);
-            
             alert(error);
         }
-
     };
 
     if (loading) return <div>로딩 중...</div>;
@@ -198,9 +195,13 @@ function ProductDetails() {
                 
                 <h3>제품 상세 설명</h3>
                 <p>{product.description}</p>
+
+                <hr />
+                <QnA productcode={product.productsCode} />
+
             </div>
         </div>
     );
 }
 
-export default ProductDetails
+export default ProductDetails;

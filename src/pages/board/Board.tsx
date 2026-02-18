@@ -7,8 +7,7 @@ function Board() {
             <h1>게시판</h1>
 
             <Link to={'/board/notice'}>공지</Link> <br/>
-            <Link to={'/board/inquiry'}>문의</Link> <br/>
-            <Link to={'/board/qna'}>QnA</Link> <br/>
+            <Link to={'/board/inquiry'}>문의</Link>
         </div>
     );
 }
