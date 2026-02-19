@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getSellerQnAList } from "../../api/sellerApi";
-import type { SellerQnaResponse } from "../../types/response/SellerQnaResponse";
+import type { SellerQnaResponse } from "../../types/response/sellerQnaResponse";
 import { BOARD_CATEGORY_LABELS } from "../../types/boardCategory";
 import { BOARD_STATUS_LABELS } from "../../types/boardStatus";
 import { Link } from "react-router-dom";

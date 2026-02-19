@@ -1,4 +1,4 @@
-import type { ProductQuestionDetailsInfo } from "../ProductQuestionDetailsInfo";
+import type { ProductQuestionDetailsInfo } from "../productQuestionDetailsInfo";
 import type { ProductQuestionInfo } from "../productQuestionInfo";
 
 export interface QnADetailsResponse {

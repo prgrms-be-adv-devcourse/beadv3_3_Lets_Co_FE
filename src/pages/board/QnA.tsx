@@ -1,10 +1,10 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import type { QnAResponse } from "../../types/response/QnAResponse";
 import { addQnA, getQnAList } from "../../api/qnaApi";
 import type { UpsertQnaRequest } from "../../types/response/upsertQnaRequest";
 import { BOARD_CATEGORY_LABELS, BOARD_CATEGORY_OPTIONS } from "../../types/boardCategory";
 import { BOARD_STATUS_LABELS } from "../../types/boardStatus";
 import { Link } from "react-router-dom";
+import type { QnAResponse } from "../../types/response/qnaResponse";
 
 interface QnAProps {
     productcode: string;

@@ -15,8 +15,8 @@ function AddProduct () {
     const [price, setPrice] = useState(0);
     const [salePrice, setSalePrice] = useState(0);
     const [productStatus, setProductStatus] = useState('ON_SALE');
-    const [categoryStatus, setCategoryStatus] = useState('');
-    const [ipStatus, setIpStatus] = useState('');
+    const [categoryStatus] = useState('');
+    const [ipStatus] = useState('');
 
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
