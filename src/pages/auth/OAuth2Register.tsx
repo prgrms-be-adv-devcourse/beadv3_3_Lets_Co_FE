@@ -15,7 +15,6 @@ function OAuth2Register() {
     const [agreeMarketing, setAgreeMarketing] = useState(false);
 
     const navigate = useNavigate();
-    const now = new Date().toISOString();
 
     const handleSubmit = async (e: FormEvent) => {
 

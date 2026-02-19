@@ -12,7 +12,7 @@ function Charge() {
     const [cardBrand, setCardBrand] = useState("VISA");
     const [expMonth, setExpMonth] = useState("");
     const [expYear, setExpYear] = useState("");
-    const [cardToken] = useState(""); 
+    // const [cardToken] = useState(""); 
 
     const navigate = useNavigate();
 

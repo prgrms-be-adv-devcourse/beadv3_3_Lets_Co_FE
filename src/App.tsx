@@ -34,6 +34,8 @@ import NoticeDetails from "./pages/board/NoticeDetails";
 import Inquiry from "./pages/board/Inquiry";
 import InquiryDetails from "./pages/board/InquiryDetails";
 import AddInquiry from "./pages/board/AddInquiry";
+import Product from "./pages/product/Product";
+import QnADetails from "./pages/board/QnADetails";
 
 function App() {
 
@@ -70,17 +72,19 @@ function App() {
         <Route path="/admin/board" element={<AdminBoard />} /> 
 
         {/* Proudct */}
-        <Route path="/products/:optionCode" element={<ProductDetails />} />
-        <Route path="/payment" element={<Payment />} />
+        <Route path="/products" element={<Product />} />
+        <Route path="/products/:ProductCode" element={<ProductDetails />} />
+        <Route path="/products/:productcode/qna/:qnaCode" element={<QnADetails />} /> 
 
-        {/* Order/Payment */}
+        {/* Payment/Cart */}
+        <Route path="/payment" element={<Payment />} />
         <Route path="/cart" element={<Cart />} /> 
-        <Route path="/charge" element={<Charge />} /> 
         <Route path="/toss/checkout" element={<CheckoutPage />} /> 
         <Route path="/toss/success" element={<SuccessPage />} />
         <Route path="/toss/fail" element={<FailPage />} />
-
-        {/* Board (Notice/inquiry/QnA) */}
+        <Route path="/charge" element={<Charge />} /> 
+        
+        {/* Board (Notice/inquiry) */}
         <Route path="/board" element={<Board />} /> 
         
         <Route path="/board/notice" element={<Notice />} /> 
@@ -89,9 +93,8 @@ function App() {
 
         <Route path="/board/inquiry" element={<Inquiry />} />  
         <Route path="/board/inquiry/:inquiryCode" element={<InquiryDetails />} />  
-        <Route path="/board/inquiry/add" element={<AddInquiry />} />  
+        <Route path="/board/inquiry/add" element={<AddInquiry />} /> 
 
-        {/* <Route path="/board/QnA" element={<QnA />} />  */}
       </Routes>
 
     </div>
