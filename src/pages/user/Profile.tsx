@@ -12,7 +12,7 @@ function Profile() {
         const fetchData = async () => {
             try {
                 const data = await profile();
-                setProfile(data);
+                setProfile(data.data);
             } catch (error) {
                 console.error("내 정보 불러오기 실패:", error);
                 alert("정보를 불러오지 못했습니다.");

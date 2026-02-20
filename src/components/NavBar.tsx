@@ -5,7 +5,7 @@ function NavBar() {
 
     return (
         <nav>
-            <div style={{ display: "flex", gap: "20px" }}>
+            <div  className="flex gap-5">
                 <Link to="/">홈으로</Link>
                 <Link to="/my">마이페이지</Link>
                 <Link to="/login">로그인</Link>

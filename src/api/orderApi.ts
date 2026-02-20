@@ -12,12 +12,11 @@ export const order =
     }
 
 export const getOrderList = 
-    async (keyword: string, page: number, size: number) => {
+    async (page: number, size: number) => {
         const response = await client.get(BASE_URL, {
             params: {
                 page: page,
-                size: size,
-                keyword: keyword 
+                size: size
             }
         });
         console.log("전체 응답:", response.data);

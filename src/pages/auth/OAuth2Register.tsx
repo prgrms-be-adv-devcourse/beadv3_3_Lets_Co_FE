@@ -1,73 +1,112 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-// import { oAuth2Register } from "../../api/authApi";
+import { oAuth2Register, profile } from "../../api/userApi";
 import { GENDER_OPTIONS } from "../../types/genderStatus";
-// import type { OAuth2RegisterRequest } from "../../types/request/oauth2RegisterRequest";
+import type { OAuth2RegisterRequest } from "../../types/request/oAuth2RegisterRequest";
 
 function OAuth2Register() {
-
+    const [mail, setMail] = useState('');
     const [name, setName] = useState('');
     const [gender, setGender] = useState('');
     const [phoneNum, setPhoneNum] = useState('');
     const [birth, setBirth] = useState('');
-    const [agreeTerms, setAgreeTerms] = useState(false);
-    const [agreePrivate, setAgreePrivate] = useState(false);
-    const [agreeMarketing, setAgreeMarketing] = useState(false);
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const fetchMyInfo = async () => {
+            try {
+                const response = await profile(); 
+                const userInfo = response.data; 
+
+                if (userInfo && userInfo.mail) {
+                    setMail(userInfo.mail);
+                }
+                
+                if (userInfo.name) setName(userInfo.name); 
+
+            } catch (error) {
+                console.error("정보 불러오기 실패:", error);
+                setMail("");
+            }
+        };
+
+        fetchMyInfo();
+    }, []);
+
     const handleSubmit = async (e: FormEvent) => {
-
         e.preventDefault(); 
-
-        if (!agreeTerms || !agreePrivate) {
-            alert("필수 약관에 동의해주세요.");
+        
+        if (!mail.trim()) {
+            alert("이메일을 입력해주세요.");
             return;
         }
-        
-        // 유효성 검사 - 위 방식 말고 다른 방식도 있음..
-        // 정규 표현식 이용해서 비쥬얼 적으로 
-/*
-            let regExp = /^[A-Za-z0-9]{5, 10}$/;
-            let str = "user01";  // 6글자, 영문자 포함, 숫자 포함
+        const emailRegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        if (!emailRegExp.test(mail)) {
+            alert("올바른 이메일 형식을 입력해주세요.");
+            return;
+        }
 
-            if(regExp.test(str)) {
-                // true
-            }
-            
-            // 몇글자 이상 영문, 숫자 포함 - 정규 표현식1
-            // 특수문자 포함 - 정규 표현식2
-            // 연속된 글자 불가 - 정규 표현식3
+        if (!name.trim()) {
+            alert("이름을 입력해주세요.");
+            return;
+        }
+        if (!gender) {
+            alert("성별을 선택해주세요.");
+            return;
+        }
+        if (!birth) {
+            alert("생년월일을 입력해주세요.");
+            return;
+        }
+
+        const phoneRegExp = /^01[016789]-?\d{3,4}-?\d{4}$/;
+        if (!phoneRegExp.test(phoneNum)) {
+            alert("올바른 핸드폰 번호 형식을 입력해주세요.");
+            return;
+        }
 
         const userData: OAuth2RegisterRequest = {
-            name: name,
+            mail: mail.trim(),
+            name: name.trim(),
             gender: gender,
             phoneNumber: phoneNum,
-            birth: birth,
-            agreeTermsAt: now,
-            agreePrivateAt: now,
-            agreeMarketingAt: agreeMarketing ? now : null
+            birth: birth
         };
 
         console.log("전송 데이터 확인:", userData);
-*/
+
         try {
-            // await oAuth2Register(userData);
+            await oAuth2Register(userData);
             
-            alert("회원가입 성공!");
-            navigate('/my');
+            alert("정보 등록이 완료되었습니다!");
+            navigate('/'); 
 
         } catch (error) {
-            alert("알 수 없는 오류가 발생했습니다.");
+            alert("처리 중 알 수 없는 오류가 발생했습니다.");
             console.error("예상치 못한 에러:", error);
         }
     };
 
     return (
         <div>
-            <h2>회원가입</h2>
-
+            <h2>추가 정보 입력</h2>
             <form onSubmit={handleSubmit}>
+
+                <div>
+                    <label>이메일: </label>
+                    <input 
+                        type="email" 
+                        value={mail}
+                        onChange={(e) => setMail(e.target.value)}
+                        placeholder="이메일을 입력해주세요"
+                    />
+                    {mail.includes('@oauth.com') && (
+                        <span style={{ color: 'red'}}>
+                            * 발급된 임시 이메일입니다. 회원가입하신 이메일로 변경해 주세요.
+                        </span>
+                    )}
+                </div>
 
                 <div>
                     <label>이름: </label>
@@ -75,7 +114,7 @@ function OAuth2Register() {
                         type="text" 
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="성함"
+                        placeholder="실명을 입력해주세요"
                     />
                 </div>
 
@@ -86,8 +125,7 @@ function OAuth2Register() {
                         onChange={(e) => setGender(e.target.value)}
                     >
                         <option value="">선택해주세요</option>
-
-                        {GENDER_OPTIONS.map((option) => (
+                        {GENDER_OPTIONS && GENDER_OPTIONS.map((option) => (
                             <option key={option.value} value={option.value}>
                                 {option.label}
                             </option>
@@ -98,10 +136,10 @@ function OAuth2Register() {
                 <div>
                     <label>핸드폰: </label>
                     <input 
-                        type="text" 
+                        type="tel" 
                         value={phoneNum}
                         onChange={(e) => setPhoneNum(e.target.value)}
-                        placeholder="핸드폰"
+                        placeholder="010-0000-0000"
                     />
                 </div>
 
@@ -114,35 +152,9 @@ function OAuth2Register() {
                     />
                 </div>
 
-                <div>
-                    <label>약관에 동의하시겠습니까?</label>
-                    <input 
-                        type="checkbox" 
-                        checked={agreeTerms} 
-                        onChange={(e) => setAgreeTerms(e.target.checked)} 
-                    />
-                </div>
-
-                <div>
-                    <label>개인정보 수집에 동의하시겠습니까?</label>
-                        <input 
-                            type="checkbox" 
-                            checked={agreePrivate} 
-                            onChange={(e) => setAgreePrivate(e.target.checked)} 
-                        />
-                </div>
-
-                <div>
-                    <label>마케팅 수신에 동의하시겠습니까?</label>
-                        <input 
-                            type="checkbox" 
-                            checked={agreeMarketing} 
-                            onChange={(e) => setAgreeMarketing(e.target.checked)} 
-                        />
-                </div>
-
-                <button type="submit">가입하기</button>
-            
+                <button type="submit">
+                    가입 완료하기
+                </button>
             </form>
         </div>
     );

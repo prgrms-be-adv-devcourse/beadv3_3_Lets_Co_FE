@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { CartItemResponse } from "../../types/response/cartItemResponse"; 
-import type { OrderRequest } from "../../types/request/orderRequest"; // 주문 요청 타입 추가
+import type { OrderRequest } from "../../types/request/orderRequest";
 import { getCarts } from "../../api/cartApi";
-import { order } from "../../api/orderApi"; // 주문 API 추가
+import { order } from "../../api/orderApi";
 
 function Cart() {
     const [cartItem, setCartItem] = useState<CartItemResponse[]>([]);
