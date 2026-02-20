@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Search from "../../components/Search";
 import { getOrderList } from "../../api/orderApi";
 import type { OrderResponse } from "../../types/response/orderResponse";
 
 function Order() {
 
     const [loading, setLoading] = useState(false);
-    const [searchKeyword, setSearchKeyword] = useState('');
     const [page, setPage] = useState(0);
     const [orders, setOrders] = useState<OrderResponse[]>([]);
 
     const PAGE_SIZE = 5;
 
-    const fetchOrders = async (keyword: string, page: number) => {
+    const fetchOrders = async (page: number) => {
         try {
             setLoading(true);
-            const data = await getOrderList(keyword, page, PAGE_SIZE); 
+            const data = await getOrderList(page, PAGE_SIZE); 
             setOrders(data);
         } catch (error) {
             console.error("주문 로딩 실패:", error);
@@ -26,22 +24,20 @@ function Order() {
     }
 
     useEffect(() => {
-        fetchOrders(searchKeyword, page);
+        fetchOrders(page);
     }, [page]); 
 
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        if (page !== 0) {
-            setPage(0);
-        } else {
-            fetchOrders(keyword, 0);
-        }
-    }
+    const handlePrevPage = () => {
+        if (page > 0) setPage(page - 1);
+    };
+
+    const handleNextPage = () => {
+        setPage(page + 1);
+    };
 
     return (
         <div>
             <h1>주문 리스트</h1>
-            <Search onSearch={handleSearch} />
 
             {loading ? (
                 <div>로딩 중...</div>
@@ -94,6 +90,24 @@ function Order() {
                             </div>
                         ))
                     )}
+                </div>
+            )}
+
+            {!loading && orders.length > 0 && (
+                <div>
+                    <button 
+                        onClick={handlePrevPage} 
+                        disabled={page === 0}
+                    >
+                        이전 페이지
+                    </button>
+                    <span>{page + 1} 페이지</span>
+                    <button 
+                        onClick={handleNextPage} 
+                        disabled={orders.length < PAGE_SIZE}
+                    >
+                        다음 페이지
+                    </button>
                 </div>
             )}
         </div>
