@@ -1,14 +1,35 @@
 import Sector from "../components/Sector";
 import Product from "./product/Product";
 
-function Home() {
+import logo from "../assets/logo.png";
+import octopus from "../assets/octopus.png";
 
+function Home() {
   return (
     <div> 
-      <h1>Gutjjeu</h1>
+      
+      <div>
+        <img 
+          src={logo} 
+          alt="Gutjjeu Logo" 
+        />
+      </div>
 
-      <Sector/> <hr/>
-      <Product/>
+      <div>
+        <Sector /> 
+        
+        <hr/>
+        
+        <Product />
+      </div>
+
+      <footer>
+        <img 
+          src={octopus} 
+          alt="Gutjjeu Octopus" 
+        />
+      </footer>
+
     </div>
   );
 }

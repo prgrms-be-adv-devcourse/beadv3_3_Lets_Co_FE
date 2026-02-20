@@ -3,6 +3,7 @@ import type { DeleteAddressRequest } from "../types/request/deleteAddressRequest
 import client from "./client";
 import type { UpsertCardRequest } from "../types/request/upsertCardRequest";
 import type { DeleteCardRequest } from "../types/request/deleteCardRequest";
+import type { OAuth2RegisterRequest } from "../types/request/oAuth2RegisterRequest";
 
 const BASE_URL = '/users'
 
@@ -13,6 +14,14 @@ export const myPage =
 
         return response.data;
     };
+
+export const oAuth2Register = 
+async (registerData: OAuth2RegisterRequest) => {
+    const response = await client.put(`${BASE_URL}/my`, registerData);
+    console.log(response.data);
+
+    return response.data;
+};
 
 export const profile =
     async () => {

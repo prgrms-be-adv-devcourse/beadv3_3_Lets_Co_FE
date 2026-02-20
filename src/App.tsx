@@ -49,7 +49,7 @@ function App() {
         {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<LocalRegister />} />
-        <Route path="/oauth2" element={<OAuth2Register />} />
+        <Route path="/my/complete-profile" element={<OAuth2Register />} />
         <Route path="/checkCode" element={<RegisterCheck />} />
 
         {/* User */}
