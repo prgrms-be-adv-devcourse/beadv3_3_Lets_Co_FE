@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
-import Search from "../../components/Search";
 import { getProducts } from "../../api/productApi";
 import { Link } from "react-router-dom";
 import type { ProductInfo } from "../../types/productInfo"; 
 
-export default function Product() {
+interface ProductProps {
+  searchKeyword: string;
+}
 
-    const prev = () => { 
-        setPage((prev) => Math.max(0, prev - 1))
-    }
-    
+export default function Product({ searchKeyword }: ProductProps) {
     const [products, setProducts] = useState<ProductInfo[]>([]); 
-    const [searchKeyword, setSearchKeyword] = useState('');
     const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(false);
 
@@ -26,7 +23,6 @@ export default function Product() {
                 setProducts(data.items);
             }
         } catch (error) {
-            
             const err = error as any; 
             if (err.response && err.response.status === 404) {
                 setProducts([]); 
@@ -39,26 +35,21 @@ export default function Product() {
     };
 
     useEffect(() => {
+        setPage(0);
+    }, [searchKeyword]);
+
+    useEffect(() => {
         fetchProducts(searchKeyword, page);
-    }, [page]); 
+    }, [searchKeyword, page]); 
 
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        
-        if (page !== 0) {
-            setPage(0);
-        } else {
-            fetchProducts(keyword, 0);
-        }
-    };
-
+    const prev = () => { 
+        setPage((prev) => Math.max(0, prev - 1))
+    }
+    
     return (
         <div>
             <h2>상품 리스트</h2>
-            
-            <Search onSearch={handleSearch} />
-            
-            <hr />
+            <hr/>
 
             {loading ? (
                 <div>로딩 중...</div>
@@ -73,12 +64,14 @@ export default function Product() {
                                     <h3>{product.name}</h3>
                                 </Link>
                                 <p>코드: {product.productsCode}</p>
-                                <p> 
-                                    {product.price.toLocaleString()}원
-                                </p>
-                                <p>
-                                    {product.salePrice.toLocaleString()}원
-                                </p>
+                                <div>
+                                    <p>
+                                        {product.price.toLocaleString()}원
+                                    </p>
+                                    <p>
+                                        {product.salePrice.toLocaleString()}원
+                                    </p>
+                                </div>
                                 <span>조회수: {product.viewCount}</span>
                             </div>
                         ))
@@ -86,7 +79,7 @@ export default function Product() {
                 </div>
             )}
 
-            <div>
+            <div className="flex gap-4">
                 <button 
                     onClick={prev}
                     disabled={page === 0}

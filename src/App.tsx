@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 
-import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import RegisterCheck from "./pages/auth/RegisterCheck";
 import Login from "./pages/auth/Login";
@@ -34,15 +33,13 @@ import NoticeDetails from "./pages/board/NoticeDetails";
 import Inquiry from "./pages/board/Inquiry";
 import InquiryDetails from "./pages/board/InquiryDetails";
 import AddInquiry from "./pages/board/AddInquiry";
-import Product from "./pages/product/Product";
 import QnADetails from "./pages/board/QnADetails";
+import Product from "./pages/product/Product";
 
 function App() {
 
   return (
     <div>
-      <NavBar/>
-
       <Routes>
         <Route path="/" element={<Home />} />
 
@@ -72,7 +69,7 @@ function App() {
         <Route path="/admin/board" element={<AdminBoard />} /> 
 
         {/* Proudct */}
-        <Route path="/products" element={<Product />} />
+        <Route path="/products"element={<Product searchKeyword="" />} />
         <Route path="/products/:ProductCode" element={<ProductDetails />} />
         <Route path="/products/:productcode/qna/:qnaCode" element={<QnADetails />} /> 
 
