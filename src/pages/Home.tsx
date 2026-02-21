@@ -5,9 +5,11 @@ import octopus from "../assets/octopus.png";
 import NavBar from "../components/NavBar";
 import SideNav from "../components/SideNav";
 import Search from "../components/Search";
+import { useAuth } from "../context/AuthContext";
 
 function Home() {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const { isLogin } = useAuth();
 
   const handleSearch = (keyword: string) => {
     setSearchKeyword(keyword);
@@ -21,9 +23,11 @@ function Home() {
           <NavBar />
         </div>
         
-        <div className="flex items-center justify-center h-12">
-          <SideNav /> 
-        </div>
+        {isLogin && (
+          <div className="flex items-center justify-center h-12">
+            <SideNav /> 
+          </div>
+        )}
       </header>
 
       <main className="flex-1 m-4">
