@@ -104,111 +104,184 @@ function AddProduct() {
     };
 
     return (
-        <div>
-            <h1>제품 등록</h1>
+        <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 sm:p-10">
+                
+                {/* 헤더 영역 */}
+                <div className="mb-8 border-b border-gray-100 pb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        <span className="w-1.5 h-7 bg-blue-600 rounded-full inline-block"></span>
+                        제품 등록
+                    </h2>
+                    <p className="mt-2 text-sm text-gray-500 ml-3">
+                        판매하실 상품의 기본 정보, 분류, 이미지를 입력해주세요.
+                    </p>
+                </div>
 
-            <form onSubmit={handleSubmit}>
-                {/* 기존 입력 폼 유지 */}
-                <div>
-                    <label>상품명:</label>
-                    <input
-                        type="text"
-                        value={productName}
-                        onChange={(e) => setProductName(e.target.value)}
-                        placeholder="상품명"
-                        required 
-                    />
-                </div>
-                
-                <div>
-                    <label>상세설명:</label>
-                    <input
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder="상세설명"
-                    />
-                </div>
-                
-                <div>
-                    <label>가격:</label>
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(Number(e.target.value))}
-                        placeholder="가격"
-                        min="0"
-                    />
-                </div>      
-
-                <div>
-                    <label>할인가:</label>
-                    <input
-                        type="number"
-                        value={salePrice}
-                        onChange={(e) => setSalePrice(Number(e.target.value))}
-                        placeholder="할인가"
-                        min="0"
-                    />
-                </div>
-                
-                <div>
-                    <label>제품 상태:</label>
-                    <select
-                        value={productStatus}
-                        onChange={(e) => setProductStatus(e.target.value)}
-                    >
-                        {PRODUCT_STATUS_OPTIONS.map((status) => (
-                            <option key={status.value} value={status.value}>
-                                {status.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>     
-                
-                {/* 카테고리 트리 UI */}
-                <div>
-                    <label>카테고리 선택:</label>
-                    <div>
-                        {categories.length > 0 ? (
-                            <CategoryTree 
-                                categories={categories}
-                                selectedCategory={categoryCode}
-                                onSelect={setCategoryCode}
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    
+                    {/* 기본 정보 섹션 */}
+                    <div className="space-y-6">
+                        <h3 className="text-lg font-bold text-gray-800 border-b pb-2">기본 정보</h3>
+                        
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                상품명 <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                value={productName}
+                                onChange={(e) => setProductName(e.target.value)}
+                                placeholder="상품명을 입력하세요"
+                                required 
+                                className="w-full bg-white border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition-all outline-none"
                             />
-                        ) : (
-                            <p>카테고리를 불러오는 중입니다...</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* 아이피 트리 UI (수정됨) */}
-                <div>
-                    <label>아이피 선택:</label>
-                    <div>
-                        {ips.length > 0 ? (
-                            <CategoryTree 
-                                categories={ips} // categories -> ips 로 변경
-                                selectedCategory={ipCode} // categoryCode -> ipCode 로 변경
-                                onSelect={setIPCode}
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">상세설명</label>
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="상품에 대한 상세 설명을 입력하세요"
+                                rows={15}
+                                className="w-full bg-white border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition-all outline-none resize-none"
                             />
-                        ) : (
-                            <p>아이피를 불러오는 중입니다...</p>
-                        )}
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">가격</label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        value={price}
+                                        onChange={(e) => setPrice(Number(e.target.value))}
+                                        placeholder="0"
+                                        min="0"
+                                        className="w-full bg-white border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3.5 pr-10 transition-all outline-none"
+                                    />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
+                                </div>
+                            </div>      
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">할인가</label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        value={salePrice}
+                                        onChange={(e) => setSalePrice(Number(e.target.value))}
+                                        placeholder="0"
+                                        min="0"
+                                        className="w-full bg-white border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3.5 pr-10 transition-all outline-none"
+                                    />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">제품 상태</label>
+                            <select
+                                value={productStatus}
+                                onChange={(e) => setProductStatus(e.target.value)}
+                                className="w-full bg-white border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition-colors outline-none cursor-pointer appearance-none hover:bg-gray-50"
+                            >
+                                {PRODUCT_STATUS_OPTIONS.map((status) => (
+                                    <option key={status.value} value={status.value}>
+                                        {status.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div> 
                     </div>
-                </div>
 
-                <ImageUpload onFilesSelected={handleImageSelect} />
+                    <hr className="border-gray-100" />
 
-                <hr/>
-                
-                <AddProductOption 
-                    options={options} 
-                    setOptions={setOptions}
-                />                
+                    {/* 카테고리 및 아이피(IP) 섹션 */}
+                    <div className="space-y-6">
+                        <h3 className="text-lg font-bold text-gray-800 border-b pb-2">분류 설정</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {/* 카테고리 트리 UI */}
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    카테고리 선택 <span className="text-red-500">*</span>
+                                </label>
+                                <div className="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                                    {categories.length > 0 ? (
+                                        <CategoryTree 
+                                            categories={categories}
+                                            selectedCategory={categoryCode}
+                                            onSelect={setCategoryCode}
+                                        />
+                                    ) : (
+                                        <div className="flex justify-center items-center h-24 text-gray-400 text-sm">
+                                            카테고리를 불러오는 중입니다...
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
 
-                <button type="submit">등록</button>
-            </form>
+                            {/* 아이피 트리 UI */}
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    아이피 선택 <span className="text-red-500">*</span>
+                                </label>
+                                <div className="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                                    {ips.length > 0 ? (
+                                        <CategoryTree 
+                                            categories={ips} 
+                                            selectedCategory={ipCode} 
+                                            onSelect={setIPCode}
+                                        />
+                                    ) : (
+                                        <div className="flex justify-center items-center h-24 text-gray-400 text-sm">
+                                            아이피를 불러오는 중입니다...
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr className="border-gray-100" />
+                    
+                    {/* 옵션 설정 섹션 */}
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-bold text-gray-800 border-b pb-2">옵션 설정</h3>
+                        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <AddProductOption 
+                                options={options} 
+                                setOptions={setOptions}
+                            />     
+                        </div>
+                    </div>           
+
+                    
+                    <hr className="border-gray-100" />
+
+                    {/* 이미지 등록 섹션 */}
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-bold text-gray-800 border-b pb-2">이미지 등록</h3>
+                        {/* ✅ 문제가 되었던 h-40 속성을 제거하여 자유롭게 확장되도록 수정 */}
+                        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                            <ImageUpload onFilesSelected={handleImageSelect} />
+                        </div>
+                    </div>
+
+                    {/* 등록 버튼 */}
+                    <div className="pt-6">
+                        <button 
+                            type="submit"
+                            className="w-full bg-blue-600 text-white font-bold text-lg py-4 rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all"
+                        >
+                            상품 등록하기
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
     );
 }
