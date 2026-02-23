@@ -1,17 +1,14 @@
-// src/pages/seller/AddProduct.tsx
 import { useState, useEffect, type FormEvent } from "react";
 import AddProductOption from "../../components/AddProductOption";
-import type { ProductOptionInfo } from "../../types/productOptionInfo"; 
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
 import { addProduct } from "../../api/sellerApi";
 import type { UpsertProductRequest } from "../../types/request/upsertProductRequest";
 import ImageUpload from "../../components/ImpageUpload";
-
-// getIP 추가
 import { getCategory, getIP } from "../../api/productApi";
+import type { CategorySortedResponse } from "../../types/response/categorySortedResponse";
+import type { ProductOptionInfo } from "../../types/productOptionInfo";
 import CategoryTree from "../../components/CategoryTree";
-import type { CategorySortedResponse } from "../../types/response/CategorySortedResponse";
 
 function AddProduct() {
     const navigate = useNavigate();
@@ -79,11 +76,10 @@ function AddProduct() {
             return;
         }
         
-        // 필요에 따라 IP 선택 필수 여부 체크
-        // if (!ipCode) {
-        //     alert("아이피를 선택해주세요.");
-        //     return;
-        // }
+        if (!ipCode) {
+            alert("아이피를 선택해주세요.");
+            return;
+        }
 
         const productData: UpsertProductRequest = {
             name: productName,
@@ -93,7 +89,7 @@ function AddProduct() {
             stock: 0,
             status: productStatus,
             categoryCode: categoryCode,
-            ipCode: ipCode, // 정상적으로 선택된 ipCode가 전송됨
+            ipCode: ipCode,
             options: options
         };
 
@@ -179,7 +175,6 @@ function AddProduct() {
                                 categories={categories}
                                 selectedCategory={categoryCode}
                                 onSelect={setCategoryCode}
-                                groupName="category" // 속성 추가: 라디오 그룹명 분리
                             />
                         ) : (
                             <p>카테고리를 불러오는 중입니다...</p>
@@ -196,7 +191,6 @@ function AddProduct() {
                                 categories={ips} // categories -> ips 로 변경
                                 selectedCategory={ipCode} // categoryCode -> ipCode 로 변경
                                 onSelect={setIPCode}
-                                groupName="ip" // 속성 추가: 라디오 그룹명 분리
                             />
                         ) : (
                             <p>아이피를 불러오는 중입니다...</p>

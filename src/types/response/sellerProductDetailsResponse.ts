@@ -1,5 +1,5 @@
 import type { CategoryInfo } from "../categoryInfo";
-import type { ProductImageInfo } from "../productImageInfo";
+import type { ImageInfo } from "../imageInfo";
 import type { ProductOptionInfo } from "../productOptionInfo";
 
 export interface SellerProductDetailsResponse {
@@ -14,5 +14,5 @@ export interface SellerProductDetailsResponse {
     options: ProductOptionInfo[];
     category: CategoryInfo[];
     ip: CategoryInfo[];
-    images: ProductImageInfo[];
+    images: ImageInfo[];
 }

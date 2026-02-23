@@ -95,8 +95,8 @@ function App() {
 
           {/* Product */}
           <Route path="/products" element={<Product searchKeyword="" />} />
-          <Route path="/products/:ProductCode" element={<ProductDetails />} />
-          <Route path="/products/:productcode/qna/:qnaCode" element={<QnADetails />} /> 
+          <Route path="/products/:productCode" element={<ProductDetails />} />
+          <Route path="/products/:productCode/qna/:qnaCode" element={<QnADetails />} /> 
 
           {/* Payment/Cart */}
           <Route path="/payment" element={<Payment />} />

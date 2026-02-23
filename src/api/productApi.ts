@@ -17,8 +17,8 @@ export const getProducts = async (search: string, page: number = 0, size: number
     return response.data;
 };
 
-export const getProduct = async (productCode: string) => {
-    const response = await client.get(`${BASE_URL}/${productCode}`);
+export const getProduct = async (productsCode: string) => {
+    const response = await client.get(`${BASE_URL}/${productsCode}`);
     console.log(response.data);
 
     return response.data;
