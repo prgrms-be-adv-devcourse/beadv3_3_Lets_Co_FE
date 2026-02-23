@@ -134,7 +134,7 @@ function SellerRegister() {
                 {/* 입력 예시 안내 박스 */}
                 <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
                     <h3 className="text-sm font-semibold text-gray-600 mb-3 flex items-center">
-                        <span className="mr-2">💡</span> 입력 예시
+                        입력 예시
                     </h3>
                     <div className="grid grid-cols-3 gap-y-2 text-sm">
                         <div className="font-medium text-gray-500">이름</div>
