@@ -40,6 +40,8 @@ import InquiryDetails from "./pages/board/InquiryDetails";
 import AddInquiry from "./pages/board/AddInquiry";
 import QnADetails from "./pages/board/QnADetails";
 import Product from "./pages/product/Product";
+import AddCategory from "./pages/admin/AddCatetory";
+import AddIP from "./pages/admin/AddIP";
 
 function App() {
   const { isLogin } = useAuth();
@@ -88,11 +90,13 @@ function App() {
           <Route path="/admin/users/:id" element={<ManageUserDetails />} /> 
           <Route path="/admin/product" element={<AdminProduct />} /> 
           <Route path="/admin/board" element={<AdminBoard />} /> 
+          <Route path="/admin/catetory" element={<AddCategory />} />
+          <Route path="/admin/ip" element={<AddIP />} />
 
           {/* Product */}
           <Route path="/products" element={<Product searchKeyword="" />} />
-          <Route path="/products/:ProductCode" element={<ProductDetails />} />
-          <Route path="/products/:productcode/qna/:qnaCode" element={<QnADetails />} /> 
+          <Route path="/products/:productCode" element={<ProductDetails />} />
+          <Route path="/products/:productCode/qna/:qnaCode" element={<QnADetails />} /> 
 
           {/* Payment/Cart */}
           <Route path="/payment" element={<Payment />} />

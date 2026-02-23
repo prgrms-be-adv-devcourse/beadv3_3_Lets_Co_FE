@@ -14,14 +14,12 @@ export function SuccessPage() {
     const amount = searchParams.get("amount");
     const paymentKey = searchParams.get("paymentKey");
 
-    // 파라미터가 없으면 비정상 접근 처리
     if (!orderId || !amount || !paymentKey) {
       alert("결제 정보가 올바르지 않습니다.");
       navigate("/");
       return;
     }
 
-    // sessionStorage에서 저장해둔 주소 정보 복구
     const storedAddress = sessionStorage.getItem("temp_order_address");
     let addressInfo: AddressInfo;
 
@@ -29,17 +27,13 @@ export function SuccessPage() {
       try {
         addressInfo = JSON.parse(storedAddress);
       } catch (e) {
-        // 파싱 에러 시 기본값 (혹은 에러 처리)
         console.error("주소 정보 파싱 실패", e);
         addressInfo = { recipient: "", address: "", addressDetail: "", phone: "" };
       }
     } else {
-      // 주소 정보가 유실된 경우 (직접 URL 접근 등)
-      // 백엔드 필수값 정책에 따라 빈 값 처리하거나 에러 처리
       addressInfo = { recipient: "", address: "", addressDetail: "", phone: "" };
     }
 
-    // 백엔드로 보낼 데이터 구성
     const requestData: PaymentRequest = {
       orderCode: orderId,
       paymentType: "TOSS_PAY",
@@ -52,21 +46,19 @@ export function SuccessPage() {
       }
     };
 
-    // 최종 승인 API 호출 함수
     async function confirm() {
       try {
         console.log("토스 최종 승인 요청:", requestData);
         await payment(requestData);
         
-        // 성공 시: 사용한 임시 데이터 삭제 후 이동
         sessionStorage.removeItem("temp_order_address");
         
         alert("결제가 정상적으로 완료되었습니다.");
-        navigate("/my/order"); // 주문 내역으로 이동
+        navigate("/my/order");
       } catch (error) {
         console.error("승인 실패:", error);
         alert("결제 승인 중 오류가 발생했습니다. 관리자에게 문의하세요.");
-        navigate("/cart"); // 실패 시 장바구니 등으로 이동
+        navigate('/');
       } finally {
         setIsConfirming(false);
       }

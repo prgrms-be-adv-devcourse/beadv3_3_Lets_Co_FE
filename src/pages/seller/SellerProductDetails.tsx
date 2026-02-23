@@ -151,7 +151,7 @@ function SellerProductDetails() {
                             {product.images.map((img, idx) => (
                                 <img 
                                     key={idx} 
-                                    src={img.url} 
+                                    src={img.urls} 
                                     alt={`product-${idx}`} 
                               />
                             ))}

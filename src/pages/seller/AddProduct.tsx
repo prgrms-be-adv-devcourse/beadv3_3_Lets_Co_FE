@@ -1,22 +1,31 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import AddProductOption from "../../components/AddProductOption";
-import type { ProductOptionInfo } from "../../types/productOptionInfo"; 
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_STATUS_OPTIONS } from "../../types/productStatus";
 import { addProduct } from "../../api/sellerApi";
 import type { UpsertProductRequest } from "../../types/request/upsertProductRequest";
 import ImageUpload from "../../components/ImpageUpload";
+import { getCategory, getIP } from "../../api/productApi";
+import type { CategorySortedResponse } from "../../types/response/categorySortedResponse";
+import type { ProductOptionInfo } from "../../types/productOptionInfo";
+import CategoryTree from "../../components/CategoryTree";
 
-function AddProduct () {
-
+function AddProduct() {
     const navigate = useNavigate();
+    
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
     const [salePrice, setSalePrice] = useState(0);
     const [productStatus, setProductStatus] = useState('ON_SALE');
-    const [categoryStatus] = useState('');
-    const [ipStatus] = useState('');
+    
+    // 카테고리 상태
+    const [categories, setCategories] = useState<CategorySortedResponse[]>([]);
+    const [categoryCode, setCategoryCode] = useState('');
+    
+    // 아이피 상태 추가
+    const [ips, setIps] = useState<CategorySortedResponse[]>([]);
+    const [ipCode, setIPCode] = useState('');
 
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
@@ -32,6 +41,24 @@ function AddProduct () {
         }
     ]);
 
+    // 카테고리와 IP 정보를 동시에 불러오도록 수정
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Promise.all을 사용하여 병렬로 데이터 호출
+                const [categoryData, ipData] = await Promise.all([
+                    getCategory(),
+                    getIP()
+                ]);
+                setCategories(categoryData);
+                setIps(ipData);
+            } catch (error) {
+                console.error("분류 데이터 불러오기 실패:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     const handleImageSelect = (files: File[]) => {
         setSelectedImages(files);
     };
@@ -44,6 +71,16 @@ function AddProduct () {
             return;
         }
 
+        if (!categoryCode) {
+            alert("카테고리를 선택해주세요.");
+            return;
+        }
+        
+        if (!ipCode) {
+            alert("아이피를 선택해주세요.");
+            return;
+        }
+
         const productData: UpsertProductRequest = {
             name: productName,
             description: description,
@@ -51,10 +88,10 @@ function AddProduct () {
             salePrice: salePrice,
             stock: 0,
             status: productStatus,
-            categoryCode: categoryStatus,
-            ipCode: ipStatus,
+            categoryCode: categoryCode,
+            ipCode: ipCode,
             options: options
-        }
+        };
 
         try {
             await addProduct(productData, selectedImages);
@@ -71,6 +108,7 @@ function AddProduct () {
             <h1>제품 등록</h1>
 
             <form onSubmit={handleSubmit}>
+                {/* 기존 입력 폼 유지 */}
                 <div>
                     <label>상품명:</label>
                     <input
@@ -128,25 +166,37 @@ function AddProduct () {
                     </select>
                 </div>     
                 
-{/* 
+                {/* 카테고리 트리 UI */}
                 <div>
-                    <label>카테고리</label>
-                    <select
-                        value={categoryStatus}
-                        onChange={(e) => setCategoryStatus(e.target.value)}
-                    >
-                    </select>
+                    <label>카테고리 선택:</label>
+                    <div>
+                        {categories.length > 0 ? (
+                            <CategoryTree 
+                                categories={categories}
+                                selectedCategory={categoryCode}
+                                onSelect={setCategoryCode}
+                            />
+                        ) : (
+                            <p>카테고리를 불러오는 중입니다...</p>
+                        )}
+                    </div>
                 </div>
 
+                {/* 아이피 트리 UI (수정됨) */}
                 <div>
-                    <label>아이피</label>
-                    <select
-                        value={ipStatus}
-                        onChange={(e) => setIpStatus(e.target.value)}
-                    >
-                    </select>
+                    <label>아이피 선택:</label>
+                    <div>
+                        {ips.length > 0 ? (
+                            <CategoryTree 
+                                categories={ips} // categories -> ips 로 변경
+                                selectedCategory={ipCode} // categoryCode -> ipCode 로 변경
+                                onSelect={setIPCode}
+                            />
+                        ) : (
+                            <p>아이피를 불러오는 중입니다...</p>
+                        )}
+                    </div>
                 </div>
- */}
 
                 <ImageUpload onFilesSelected={handleImageSelect} />
 
