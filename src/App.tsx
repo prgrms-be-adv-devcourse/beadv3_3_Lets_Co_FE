@@ -42,6 +42,7 @@ import QnADetails from "./pages/board/QnADetails";
 import Product from "./pages/product/Product";
 import AddCategory from "./pages/admin/AddCatetory";
 import AddIP from "./pages/admin/AddIP";
+import ManualSettlement from "./pages/admin/ManualSettlement";
 
 function App() {
   const { isLogin } = useAuth();
@@ -92,6 +93,7 @@ function App() {
           <Route path="/admin/board" element={<AdminBoard />} /> 
           <Route path="/admin/catetory" element={<AddCategory />} />
           <Route path="/admin/ip" element={<AddIP />} />
+          <Route path="/admin/settlement" element={<ManualSettlement />} />
 
           {/* Product */}
           <Route path="/products" element={<Product searchKeyword="" />} />
