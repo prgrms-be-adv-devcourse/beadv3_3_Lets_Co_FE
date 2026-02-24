@@ -30,7 +30,11 @@ function CategoryNode({
     };
 
     const handleSelect = () => {
-        onSelect(category.categoryCode);
+        if (isSelected) {
+            onSelect(""); // 이미 선택된 항목이면 선택 해제
+        } else {
+            onSelect(category.categoryCode);
+        }
     };
 
     return (
