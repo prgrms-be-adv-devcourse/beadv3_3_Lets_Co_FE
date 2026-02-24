@@ -255,7 +255,6 @@ function AddProduct() {
                         </div>
                     </div>           
 
-                    
                     <hr className="border-gray-100" />
 
                     {/* 이미지 등록 섹션 */}

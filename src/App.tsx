@@ -42,6 +42,9 @@ import QnADetails from "./pages/board/QnADetails";
 import Product from "./pages/product/Product";
 import AddCategory from "./pages/admin/AddCatetory";
 import AddIP from "./pages/admin/AddIP";
+import ManualSettlement from "./pages/admin/ManualSettlement";
+import SellerProduct from "./pages/seller/SellerProduct";
+import SellerProductDetails from "./pages/seller/SellerProductDetails";
 
 function App() {
   const { isLogin } = useAuth();
@@ -79,10 +82,12 @@ function App() {
           <Route path="/my/card" element={<Card />} />        
 
           {/* Seller */}
-          <Route path="/seller" element={<Seller />} /> 
           <Route path="/seller/register" element={<SellerRegister />} /> 
           <Route path="/seller/check" element={<SellerCheck />} /> 
+          <Route path="/seller" element={<Seller />} /> 
           <Route path="/seller/product/add" element={<AddProduct />} /> 
+          <Route path="/seller/product/list" element={<SellerProduct />} /> 
+          <Route path="/seller/product/:code" element={<SellerProductDetails />} />
 
           {/* Admin */}
           <Route path="/admin" element={<Admin />} /> 
@@ -92,6 +97,7 @@ function App() {
           <Route path="/admin/board" element={<AdminBoard />} /> 
           <Route path="/admin/catetory" element={<AddCategory />} />
           <Route path="/admin/ip" element={<AddIP />} />
+          <Route path="/admin/settlement" element={<ManualSettlement />} />
 
           {/* Product */}
           <Route path="/products" element={<Product searchKeyword="" />} />

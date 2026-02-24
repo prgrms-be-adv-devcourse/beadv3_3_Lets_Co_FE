@@ -24,30 +24,67 @@ function LocalRegister() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault(); 
 
-        if (!username || !password || !name) {
-            alert("필수 항목을 모두 입력해주세요.");
+
+        const today = new Date();
+        const birthDate = new Date(birth);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        
+
+        if (age < 14) {
+            alert("만 14세 미만은 가입할 수 없습니다.");
             return;
         }
-     
+        
         if (!agreeTerms || !agreePrivate) {
             alert("필수 약관에 동의해주세요.");
             return;
         }
 
-/*
-        // 유효성 검사 - 위 방식 말고 다른 방식도 있음..
-        // 정규 표현식 이용해서 비쥬얼 적으로 
-        let regExp = /^[A-Za-z0-9]{5, 10}$/;
-        let str = "user01";  // 6글자, 영문자 포함, 숫자 포함
-
-        if(regExp.test(str)) {
-            // true
+        const idRegex = /^[a-z0-9]{7,11}$/;
+        if (!idRegex.test(username)) {
+            alert("아이디는 7~11자의 영문 소문자와 숫자만 사용 가능합니다.");
+            return;
         }
-        
-        // 몇글자 이상 영문, 숫자 포함 - 정규 표현식1
-        // 특수문자 포함 - 정규 표현식2
-        // 연속된 글자 불가 - 정규 표현식3
-*/
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!mail || !emailRegex.test(mail) || mail.length > 100) {
+            alert("올바른 이메일 형식을 100자 이내로 입력해주세요.");
+            return;
+        }
+
+        const pwRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,16}$/;
+        if (!pwRegex.test(password)) {
+            alert("비밀번호는 영문, 숫자, 특수문자를 각각 최소 1자 이상 포함하여 8~16자로 입력해주세요.");
+            return;
+        }
+
+        if (password !== pwCheck) {
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return;
+        }
+
+        const nameRegex = /^[가-힣a-zA-Z ]+$/;
+        if (!nameRegex.test(name) || name.length > 50) {
+            alert("이름은 50자 이하의 한글 또는 영문만 입력 가능합니다.");
+            return;
+        }
+
+        if (!gender) {
+            alert("성별을 선택해주세요.");
+            return;
+        }
+
+        const phoneRegex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
+        if (!phoneRegex.test(phoneNum)) {
+            alert("휴대폰 번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
+            return;
+        }
+
+        const birthRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+        if (!birthRegex.test(birth)) {
+            alert("생년월일 형식이 올바르지 않습니다. (예: 1990-01-01)");
+            return;
+        }
 
         const userData: RegisterRequest = {
             ID: username, 
@@ -64,7 +101,13 @@ function LocalRegister() {
         };
 
         try {
-            await register(userData);
+            const response = await register(userData);
+            
+            if (response && response.data && response.data.resultCode === 'FAIL') {
+                alert(response.data.data || "회원가입에 실패했습니다. 입력값을 확인해주세요.");
+                return;
+            }
+
             alert("회원가입 성공! 인증을 진행합니다.");
             navigate('/checkCode');
         } catch (error) {

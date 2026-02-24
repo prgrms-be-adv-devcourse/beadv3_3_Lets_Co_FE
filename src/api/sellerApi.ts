@@ -6,13 +6,6 @@ import client from "./client"
 
 const BASE_URL = '/seller'
 
-interface ProductListParams {
-    search?: string;
-    category?: string;
-    page: number;
-    size?: number;
-}
-
 export const sellerRegister =
     async (sellerData: SellerRegisterRequest) => {
         const response = await client.post(`${BASE_URL}/users/register`, sellerData);
@@ -56,18 +49,24 @@ export const addProduct =
     };
 
 
-export const getSellerProductList = 
-    async ({ search, category, page, size = 10 }: ProductListParams) => {
-        const response = await client.get(`${BASE_URL}/products`, {
-            params: {
-                search: search || null,
-                category: category || null,
-                page: page - 1,
-                size: size,
-            }
-        });
-        return response.data;
-    };
+export const getSellerProductList = async (
+    page: number, 
+    size: number, 
+    search?: string, 
+    category?: string, 
+    ip?: string
+) => {
+    const response = await client.get(`${BASE_URL}/products`, {
+        params: {
+            page: page,
+            size: size,
+            search: search || undefined,
+            category: category || undefined,
+            ip: ip || undefined
+        }
+    });
+    return response.data;
+};
 
 export const getSellerProductDetails = async (code: string) => {
     const response = await client.get(`${BASE_URL}/products/${code}`);

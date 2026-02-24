@@ -68,6 +68,11 @@ export default defineConfig({
       '/qna': {
         target: "http://localhost:8000",
         changeOrigin: true
+      },
+
+      '/settlement': {
+        target: "http://localhost:8000",
+        changeOrigin: true
       }
     }
   }

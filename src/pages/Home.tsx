@@ -30,7 +30,9 @@ function Home() {
       </div>
 
       <Link to={'/admin/catetory'}>카테고리 등록</Link> <br/>
-      <Link to={'/admin/ip'}>아이피 등록</Link>
+      <Link to={'/admin/ip'}>아이피 등록</Link> <br/>
+      <Link to={'/admin/settlement'}>수동 정산</Link>
+      
     </div>
   );
 }
