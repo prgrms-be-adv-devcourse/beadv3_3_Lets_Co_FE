@@ -5,7 +5,7 @@ import { PRODUCT_STATUS_LABELS } from "../../types/productStatus";
 import type { ProductListResponse } from "../../types/response/productListResponse";
 
 interface ProductProps {
-  searchKeyword: string;
+    searchKeyword: string;
 }
 
 export default function Product({ searchKeyword }: ProductProps) {
@@ -116,6 +116,8 @@ export default function Product({ searchKeyword }: ProductProps) {
                                         
                                         <div className="mt-auto flex items-end justify-between">
                                             <div className="flex flex-col">
+
+{/* 할인가
                                                 {product.salePrice > 0 && product.salePrice < product.price ? (
                                                     <>
                                                         <span className="text-gray-400 line-through text-xs mb-0.5">
@@ -130,6 +132,12 @@ export default function Product({ searchKeyword }: ProductProps) {
                                                         {product.price.toLocaleString()}원
                                                     </span>
                                                 )}
+*/}
+                                                
+                                                {/* 항상 원가만 표시되도록 수정 */}
+                                                <span className="text-gray-800 font-bold text-lg">
+                                                    {product.price.toLocaleString()}원
+                                                </span>
                                             </div>
                                             <span className="text-xs text-gray-400 font-medium bg-gray-50 px-2 py-1 rounded-md">
                                                 조회 {product.viewCount}

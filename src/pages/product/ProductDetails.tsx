@@ -170,8 +170,11 @@ function ProductDetails() {
     // 선택된 옵션 객체 가져오기 (총 금액 계산용)
     const selectedOpt = product.options.find(opt => opt.code === selectedOptionCode);
     
-    // 총금액: 옵션을 선택했으면 옵션 가격 기준, 아니면 기본 상품 가격(할인가 우선) 기준
-    const basePrice = product.salePrice > 0 && product.salePrice < product.price ? product.salePrice : product.price;
+    // 할인가 적용 로직 주석 처리 
+    // const basePrice = product.salePrice > 0 && product.salePrice < product.price ? product.salePrice : product.price;
+    
+    // 할인가를 무시하고 항상 원가 기준 적용
+    const basePrice = product.price;
     const currentUnitPrice = selectedOpt ? selectedOpt.price : basePrice;
     const totalPrice = currentUnitPrice * quantity;
 
@@ -240,6 +243,8 @@ function ProductDetails() {
                     {/* 가격 및 조회수 영역 */}
                     <div className="flex items-end justify-between border-b border-gray-100 pb-6 mb-6">
                         <div className="flex items-center gap-3">
+                            
+{/* 할인가 노출 UI 주석 처리
                             {product.salePrice > 0 && product.salePrice < product.price ? (
                                 <>
                                     <span className="text-3xl font-bold text-red-500">{product.salePrice.toLocaleString()}원</span>
@@ -248,6 +253,10 @@ function ProductDetails() {
                             ) : (
                                 <span className="text-3xl font-bold text-gray-900">{product.price.toLocaleString()}원</span>
                             )}
+*/}
+
+                            {/* 무조건 원가 표시 */}
+                            <span className="text-3xl font-bold text-gray-900">{product.price.toLocaleString()}원</span>
                         </div>
                         <span className="text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-md">
                             조회 {product.viewCount}

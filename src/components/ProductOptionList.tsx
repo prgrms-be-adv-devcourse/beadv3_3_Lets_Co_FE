@@ -18,8 +18,10 @@ function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
                     <thead className="text-xs text-gray-700 bg-gray-50 border-b border-gray-100">
                         <tr>
                             <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap">옵션명</th>
-                            <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap">금액</th>
-                            <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap">할인 금액</th>
+                            <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap">제품 금액</th>
+{/* 할인가 헤더 주석 처리 
+                            <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap">결제 금액(할인 적용)</th>
+*/}
                             <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap">잔여 재고</th>
                             <th scope="col" className="px-6 py-4 font-bold whitespace-nowrap text-center">상태</th>
                         </tr>
@@ -35,18 +37,21 @@ function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     {opt.price > 0 ? (
-                                        <span className="text-gray-900">+{opt.price.toLocaleString()}원</span>
+                                        <span className="text-gray-900">{opt.price.toLocaleString()}원</span>
                                     ) : (
                                         <span className="text-gray-400">0원</span>
                                     )}
                                 </td>
+
+{/* 할인가 데이터 셀 주석 처리 
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     {opt.salePrice > 0 ? (
-                                        <span className="text-red-500 font-medium">-{opt.salePrice.toLocaleString()}원</span>
+                                        <span className="text-red-500 font-medium">{opt.salePrice.toLocaleString()}원</span>
                                     ) : (
                                         <span className="text-gray-400">-</span>
                                     )}
                                 </td>
+*/}
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`${opt.stock <= 0 ? 'text-red-500 font-medium' : 'text-gray-700'}`}>
                                         {opt.stock.toLocaleString()}개

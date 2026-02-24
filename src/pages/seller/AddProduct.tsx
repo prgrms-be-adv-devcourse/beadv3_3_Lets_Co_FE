@@ -16,14 +16,10 @@ function AddProduct() {
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
-    const [salePrice, setSalePrice] = useState(0);
+    const [salePrice] = useState(0);
     const [productStatus, setProductStatus] = useState('ON_SALE');
-    
-    // 카테고리 상태
     const [categories, setCategories] = useState<CategorySortedResponse[]>([]);
     const [categoryCode, setCategoryCode] = useState('');
-    
-    // 아이피 상태 추가
     const [ips, setIps] = useState<CategorySortedResponse[]>([]);
     const [ipCode, setIPCode] = useState('');
 
@@ -41,11 +37,9 @@ function AddProduct() {
         }
     ]);
 
-    // 카테고리와 IP 정보를 동시에 불러오도록 수정
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Promise.all을 사용하여 병렬로 데이터 호출
                 const [categoryData, ipData] = await Promise.all([
                     getCategory(),
                     getIP()
@@ -85,7 +79,7 @@ function AddProduct() {
             name: productName,
             description: description,
             price: price,
-            salePrice: salePrice,
+            salePrice: salePrice, // 여기서 0으로 전달됨
             stock: 0,
             status: productStatus,
             categoryCode: categoryCode,
@@ -149,9 +143,10 @@ function AddProduct() {
                             />
                         </div>
                         
+                        {/* UI 균형을 맞추기 위해 (할인가 추가) */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">가격</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">상품 가격 (원가)</label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -165,8 +160,9 @@ function AddProduct() {
                                 </div>
                             </div>      
 
+{/* 할인가(결제 가격) 입력 필드 주석 처리 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">할인가</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">결제 가격 (할인가)</label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -179,6 +175,7 @@ function AddProduct() {
                                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
                                 </div>
                             </div>
+*/}
                         </div>
                         
                         <div>
@@ -264,7 +261,6 @@ function AddProduct() {
                     {/* 이미지 등록 섹션 */}
                     <div className="space-y-4">
                         <h3 className="text-lg font-bold text-gray-800 border-b pb-2">이미지 등록</h3>
-                        {/* ✅ 문제가 되었던 h-40 속성을 제거하여 자유롭게 확장되도록 수정 */}
                         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
                             <ImageUpload onFilesSelected={handleImageSelect} />
                         </div>

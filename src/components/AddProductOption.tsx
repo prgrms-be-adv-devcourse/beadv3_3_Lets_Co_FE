@@ -103,7 +103,7 @@ function AddProductOption({options, setOptions}: Props) {
 
                             {/* 옵션 금액 */}
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">금액</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">상품 가격 (원가)</label>
                                 <div className="relative">
                                     <input 
                                         type="number"
@@ -115,9 +115,9 @@ function AddProductOption({options, setOptions}: Props) {
                                 </div>
                             </div>
 
-                            {/* 할인 금액 */}
+{/* 할인 금액 주석 처리 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">할인 금액</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">결제 가격 (할인가)</label>
                                 <div className="relative">
                                     <input 
                                         type="number"
@@ -128,6 +128,7 @@ function AddProductOption({options, setOptions}: Props) {
                                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">원</span>
                                 </div>
                             </div>
+*/}
 
                             {/* 재고 */}
                             <div>
