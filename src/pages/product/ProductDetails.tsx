@@ -10,7 +10,7 @@ import type { OrderRequest } from "../../types/request/orderRequest";
 import type { ProductRequest } from "../../types/request/productRequest";
 
 import ProductOptionList from "../../components/ProductOptionList";
-// import QnA from "../board/QnA";
+import QnA from "../board/QnA";
 
 function ProductDetails() {
     const { productCode } = useParams<{ productCode: string }>();
@@ -22,7 +22,6 @@ function ProductDetails() {
     const [selectedOptionCode, setSelectedOptionCode] = useState<string>("");
     const [quantity, setQuantity] = useState<number>(1);
     
-    // 갤러리 메인 이미지 상태
     const [mainImage, setMainImage] = useState<string>("");
 
     useEffect(() => {
@@ -163,6 +162,11 @@ function ProductDetails() {
         ? product.category.map(c => c.categoryName).join(" > ") 
         : "미분류";
 
+    // 아이피(IP) 텍스트 생성 (ex: 산리오 > 헬로키티)
+    const ipText = product.ip && product.ip.length > 0 
+        ? product.ip.map(i => i.categoryName).join(" > ") 
+        : "";
+
     // 선택된 옵션 객체 가져오기 (총 금액 계산용)
     const selectedOpt = product.options.find(opt => opt.code === selectedOptionCode);
     
@@ -173,7 +177,6 @@ function ProductDetails() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            {/* 상단 레이아웃: 좌측 이미지 갤러리 / 우측 상품 정보 및 폼 */}
             <div className="flex flex-col lg:flex-row gap-12 mb-16">
                 
                 {/* 좌측: 이미지 갤러리 */}
@@ -217,7 +220,19 @@ function ProductDetails() {
 
                 {/* 우측: 상품 기본 정보 및 옵션 폼 */}
                 <div className="w-full lg:w-1/2 flex flex-col">
-                    <span className="text-sm font-medium text-blue-600 mb-2">{categoryText}</span>
+                    
+                    {/* 카테고리 & 아이피(IP) 영역*/}
+                    <div className="flex flex-col gap-1 mb-3">
+                        <span className="text-sm font-bold text-blue-600">
+                            {categoryText}
+                        </span>
+                        {ipText && (
+                            <span className="text-sm font-medium text-purple-500">
+                                {ipText}
+                            </span>
+                        )}
+                    </div>
+
                     <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
                         {product.name}
                     </h1>
@@ -337,7 +352,7 @@ function ProductDetails() {
                     </div>
                 </section>
 
-                {/* 상품 옵션 목록 (컴포넌트) */}
+                {/* 상품 옵션 목록 */}
                 <section className="mb-20">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
@@ -346,8 +361,7 @@ function ProductDetails() {
                     <ProductOptionList options={product.options} />
                 </section>
 
-                {/* 3. 상품 문의 (QnA) */}
-{/*                 
+                {/* 상품 문의 (QnA) */}
                 <section>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
@@ -357,7 +371,7 @@ function ProductDetails() {
                         <QnA productcode={product.productsCode} />
                     </div>
                 </section>
-*/}
+
             </div>
         </div>
     );

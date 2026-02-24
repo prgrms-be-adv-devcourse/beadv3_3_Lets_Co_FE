@@ -1,11 +1,10 @@
 import type { UpsertCategoryRequest } from "../types/request/upsertCategoryRequest";
-import type { ProductResponse } from "../types/response/productResponse";
 import client from "./client";
 
 const BASE_URL = "/products";
 
 export const getProducts = async (search: string, page: number = 0, size: number = 5) => {
-    const response = await client.get<ProductResponse>(BASE_URL, {
+    const response = await client.get(BASE_URL, {
         params: {
             search: search,
             page: page,

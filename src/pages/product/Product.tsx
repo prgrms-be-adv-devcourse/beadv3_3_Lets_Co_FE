@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../../api/productApi";
 import { Link } from "react-router-dom";
-import type { ProductInfo } from "../../types/productInfo"; 
 import { PRODUCT_STATUS_LABELS } from "../../types/productStatus";
+import type { ProductListResponse } from "../../types/response/productListResponse";
 
 interface ProductProps {
   searchKeyword: string;
 }
 
 export default function Product({ searchKeyword }: ProductProps) {
-    const [products, setProducts] = useState<ProductInfo[]>([]); 
+    const [products, setProducts] = useState<ProductListResponse[]>([]); 
     const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(false);
 
@@ -109,11 +109,6 @@ export default function Product({ searchKeyword }: ProductProps) {
 
                                     {/* 상품 정보 영역 */}
                                     <div className="p-5 flex flex-col flex-grow">
-                                        <div className="text-xs text-gray-400 font-medium mb-1 truncate">
-                                            {product.category && product.category.length > 0 
-                                                ? product.category.join(" > ") 
-                                                : "카테고리 없음"}
-                                        </div>
                                         
                                         <h3 className="font-bold text-gray-800 text-base mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                             {product.name}
