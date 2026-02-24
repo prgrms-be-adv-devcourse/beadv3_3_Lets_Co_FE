@@ -37,31 +37,41 @@ function OAuth2Register() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault(); 
         
-        // 유효성 검사 로직 (기존 유지)
-        if (!mail.trim()) {
-            alert("이메일을 입력해주세요.");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!mail || !emailRegex.test(mail) || mail.length > 100) {
+            alert("올바른 이메일 형식을 100자 이내로 입력해주세요.");
             return;
         }
-        const emailRegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-        if (!emailRegExp.test(mail)) {
-            alert("올바른 이메일 형식을 입력해주세요.");
+
+        const nameRegex = /^[가-힣a-zA-Z ]+$/;
+        if (!nameRegex.test(name) || name.length > 50) {
+            alert("이름은 50자 이하의 한글 또는 영문만 입력 가능합니다.");
             return;
         }
-        if (!name.trim()) {
-            alert("이름을 입력해주세요.");
-            return;
-        }
+        
         if (!gender) {
             alert("성별을 선택해주세요.");
             return;
         }
-        if (!birth) {
-            alert("생년월일을 입력해주세요.");
+
+        const birthRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+        if (!birthRegex.test(birth)) {
+            alert("생년월일 형식이 올바르지 않습니다. (예: 1990-01-01)");
             return;
         }
-        const phoneRegExp = /^01[016789]-?\d{3,4}-?\d{4}$/;
-        if (!phoneRegExp.test(phoneNum)) {
-            alert("올바른 핸드폰 번호 형식을 입력해주세요.");
+
+        const today = new Date();
+        const birthDate = new Date(birth);
+        let age = today.getFullYear() - birthDate.getFullYear();
+
+        if (age < 14) {
+            alert("만 14세 미만은 가입할 수 없습니다.");
+            return;
+        }
+
+        const phoneRegex = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
+        if (!phoneRegex.test(phoneNum)) {
+            alert("휴대폰 번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
             return;
         }
 
@@ -74,7 +84,13 @@ function OAuth2Register() {
         };
 
         try {
-            await oAuth2Register(userData);
+            const response = await oAuth2Register(userData);
+            
+            if (response && response.data) {
+                alert(response.data.data || "정보 등록에 실패했습니다. 입력값을 확인해주세요.");
+                return;
+            }
+
             alert("정보 등록이 완료되었습니다!");
             navigate('/'); 
         } catch (error) {
