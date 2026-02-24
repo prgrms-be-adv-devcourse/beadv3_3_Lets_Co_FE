@@ -1,19 +1,5 @@
 import type { ProductOptionInfo } from "../types/productOptionInfo";
 
-// 상태 값을 예쁜 한글 배지(Badge) UI로 변환하는 함수
-const getStatusBadge = (status: string) => {
-    switch (status) {
-        case 'ON_SALE':
-            return <span className="px-2.5 py-1 text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 rounded-md">판매중</span>;
-        case 'SOLD_OUT':
-            return <span className="px-2.5 py-1 text-xs font-bold text-red-700 bg-red-50 border border-red-200 rounded-md">품절</span>;
-        case 'HIDDEN':
-            return <span className="px-2.5 py-1 text-xs font-bold text-gray-700 bg-gray-100 border border-gray-200 rounded-md">숨김</span>;
-        default:
-            return <span className="px-2.5 py-1 text-xs font-bold text-gray-700 bg-gray-100 border border-gray-200 rounded-md">{status}</span>;
-    }
-};
-
 function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
     // 옵션이 없을 때의 빈 화면 처리
     if (!options || options.length === 0) {
@@ -27,7 +13,6 @@ function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
 
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            {/* 모바일 화면에서도 표가 깨지지 않도록 스크롤 처리 */}
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-600">
                     <thead className="text-xs text-gray-700 bg-gray-50 border-b border-gray-100">
@@ -44,7 +29,6 @@ function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
                             <tr key={index} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4 font-medium text-gray-900 min-w-[200px]">
                                     {opt.name}
-                                    {/* 테스트용 코드는 작고 흐리게 표시 */}
                                     {opt.code && (
                                         <span className="block text-xs text-gray-400 mt-1 font-normal">{opt.code}</span>
                                     )}
@@ -68,8 +52,20 @@ function ProductOptionList({ options }: { options: ProductOptionInfo[] }) {
                                         {opt.stock.toLocaleString()}개
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-center whitespace-nowrap">
-                                    {getStatusBadge(opt.status)}
+                                <td className="px-6 py-4 whitespace-nowrap text-center">
+                                    {opt.stock <= 0 ? (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
+                                            품절
+                                        </span>
+                                    ) : opt.stock < 10 ? (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+                                            품절 임박
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                            판매중
+                                        </span>
+                                    )}
                                 </td>
                             </tr>
                         ))}

@@ -10,7 +10,7 @@ import type { OrderRequest } from "../../types/request/orderRequest";
 import type { ProductRequest } from "../../types/request/productRequest";
 
 import ProductOptionList from "../../components/ProductOptionList";
-// import QnA from "../board/QnA";
+import QnA from "../board/QnA";
 
 function ProductDetails() {
     const { productCode } = useParams<{ productCode: string }>();
@@ -362,7 +362,6 @@ function ProductDetails() {
                 </section>
 
                 {/* 상품 문의 (QnA) */}
-{/* 
                 <section>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
@@ -372,7 +371,7 @@ function ProductDetails() {
                         <QnA productcode={product.productsCode} />
                     </div>
                 </section>
-*/}
+
             </div>
         </div>
     );
