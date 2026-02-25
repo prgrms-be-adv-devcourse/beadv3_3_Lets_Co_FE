@@ -30,10 +30,13 @@ client.interceptors.request.use(
     }
 );
 
-// [토큰 자동 갱신 코드 ] - 갱신을 기다리는 대기열(Queue) 설정
-// 여러 API가 동시에 401 에러를 냈을 때, 토큰 재발급을 딱 한 번만 하도록 도와주는 변수들
-let isRefreshing = false; // 현재 토큰을 갱신 중인지 확인하는 상태값
-let refreshSubscribers: ((token?: string) => void)[] = []; // 갱신되는 동안 기다리는 기존 요청들
+/* ==========================================================
+   [토큰 자동 갱신 코드 비활성화] 
+   당장 사용하지 않으므로 변수 및 대기열 함수 전체 주석 처리
+========================================================== */
+/*
+let isRefreshing = false; 
+let refreshSubscribers: ((token?: string) => void)[] = []; 
 
 const onRefreshed = () => {
     refreshSubscribers.forEach((cb) => cb());
@@ -43,6 +46,7 @@ const onRefreshed = () => {
 const addRefreshSubscriber = (cb: () => void) => {
     refreshSubscribers.push(cb);
 };
+*/
 
 // [응답(Response) 인터셉터]
 client.interceptors.response.use(
@@ -58,23 +62,23 @@ client.interceptors.response.use(
 
     async (error) => {
         const { config, response } = error;
-        const originalRequest = config; // 실패한 원래의 API 요청 정보
+        // const originalRequest = config; // 토큰 갱신
 
-        // [토큰 자동 갱신 코드] - (401 에러 발생 시 처리)
-        // 만약 Access Token이 만료되어서 401 에러가 났고, 한 번도 재시도한 적 없는 요청이라면
+        /* ==========================================================
+           401 에러 발생 시 /auth/refresh 로 재시도하는 로직 차단
+        ========================================================== */
+        /*
         if (response && response.status === 401 && !originalRequest._retry) {
             
-            // 토큰 갱신 API 자체에서 401이 났다면 (리프레시 토큰까지 만료된 상황)
             if (originalRequest.url === '/auth/refresh') {
-                window.location.href = '/login'; // 로그인 페이지로 쫓아냄
+                window.location.href = '/login'; 
                 return Promise.reject(error);
             }
 
-            // 이미 다른 API 요청 때문에 토큰 갱신이 진행 중이라면, 잠시 대기열에 추가
             if (isRefreshing) {
                 return new Promise((resolve) => {
                     addRefreshSubscriber(() => {
-                        resolve(client(originalRequest)); // 갱신 완료 후 원래 요청 재시도
+                        resolve(client(originalRequest)); 
                     });
                 });
             }
@@ -83,38 +87,35 @@ client.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                // 백엔드로 리프레시 토큰을 보내서 새로운 Access Token을 발급받음
                 await axios.post(`${baseURL}/auth/refresh`, {}, {
                     withCredentials: true 
                 });
 
-                isRefreshing = false; // 갱신 성공
-                onRefreshed(); // 기다리던 다른 API 요청들도 일괄 재시도 처리
+                isRefreshing = false; 
+                onRefreshed(); 
 
-                // 처음에 실패했던 현재 요청을 다시 전송
                 return client(originalRequest);
 
             } catch (refreshError) {
-                // 리프레시 토큰마저 만료되어서 갱신에 실패한 경우
                 isRefreshing = false;
                 refreshSubscribers = [];
                 
                 alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-                window.location.href = '/login'; // 로그인 페이지로 이동
+                window.location.href = '/login'; 
                 return Promise.reject(refreshError);
             }
         }
+        */
 
-        // [로그 코드] - API 응답이 실패(401 이외의 4xx, 5xx 에러)했을 때 찍는 에러 로그
+        // [로그 코드] - API 응답이 실패(4xx, 5xx 에러)했을 때 찍는 에러 로그
         console.group(`[API Error] ${config?.method?.toUpperCase()} ${config?.url}`);
         
         if (response) {
-            // 백엔드(Spring Boot)에서 응답을 보냈지만, 상태 코드가 4xx, 5xx인 경우
-            // Spring Boot의 기본 에러 응답 포맷(timestamp, status, error, message 등)을 확인
+            // 상태 코드가 4xx, 5xx인 경우
             console.error(`Status: ${response.status}`);
             console.error('Error Data:', response.data);
         } else if (error.request) {
-            // 요청은 만들어졌으나 서버에서 전혀 응답이 없는 경우 (네트워크 오류, 서버 다운, CORS 에러 등)
+            // 서버에서 전혀 응답이 없는 경우
             console.error('No Response from server. Request details:', error.request);
         } else {
             // 요청 설정 자체에 문제가 있는 경우
