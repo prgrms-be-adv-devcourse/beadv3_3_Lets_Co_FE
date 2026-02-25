@@ -1,4 +1,3 @@
-import type { UpsertCategoryRequest } from "../types/request/upsertCategoryRequest";
 import client from "./client";
 
 const BASE_URL = "/products";
@@ -36,18 +35,3 @@ export const getIP = async () => {
 
     return response.data;
 }
-
-export const addCategory = async (addData: UpsertCategoryRequest) => {
-    const response = await client.post(`${BASE_URL}/admin/category`, addData);
-    console.log(response.data);
-
-    return response.data;
-}
-
-export const addIP = async (addData: UpsertCategoryRequest) => {
-    const response = await client.post(`${BASE_URL}/ip`, addData);
-    console.log(response.data);
-
-    return response.data;
-}
-

@@ -1,6 +1,7 @@
 import type { CategoryInfo } from "../categoryInfo";
 import type { ImageInfo } from "../imageInfo";
 import type { ProductOptionInfo } from "../productOptionInfo";
+import type { ReviewResponse } from "./reviewResponse";
 
 export interface SellerProductDetailsResponse {
     productsCode: string;
@@ -15,4 +16,5 @@ export interface SellerProductDetailsResponse {
     category: CategoryInfo[];
     ip: CategoryInfo[];
     images: ImageInfo[];
+    reviews: ReviewResponse[];
 }

@@ -1,7 +1,8 @@
 import { useState, useEffect, type FormEvent, type JSX } from "react";
-import { getIP, addIP } from "../../api/productApi";
 import type { UpsertCategoryRequest } from "../../types/request/upsertCategoryRequest";
 import type { CategorySortedResponse } from "../../types/response/categorySortedResponse";
+import { addIP } from "../../api/adminApi";
+import { getIP } from "../../api/productApi";
 
 function AddIP() {    
     const [ips, setIPs] = useState<CategorySortedResponse[]>([]);
