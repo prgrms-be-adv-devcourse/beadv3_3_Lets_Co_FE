@@ -45,6 +45,8 @@ import AddIP from "./pages/admin/AddIP";
 import ManualSettlement from "./pages/admin/ManualSettlement";
 import SellerProduct from "./pages/seller/SellerProduct";
 import SellerProductDetails from "./pages/seller/SellerProductDetails";
+import OrderList from "./pages/order/OrderList";
+import OrderDetails from "./pages/order/OrderDetails";
 
 function App() {
   const { isLogin } = useAuth();
@@ -104,13 +106,15 @@ function App() {
           <Route path="/products/:productCode" element={<ProductDetails />} />
           <Route path="/products/:productCode/qna/:qnaCode" element={<QnADetails />} /> 
 
-          {/* Payment/Cart */}
+          {/* OrderPayment/Cart */}
           <Route path="/payment" element={<Payment />} />
           <Route path="/cart" element={<Cart />} /> 
           <Route path="/toss/checkout" element={<CheckoutPage />} /> 
           <Route path="/toss/success" element={<SuccessPage />} />
           <Route path="/toss/fail" element={<FailPage />} />
           <Route path="/charge" element={<Charge />} /> 
+          <Route path="/my/orders" element={<OrderList />} /> 
+          <Route path="/my/orders/:orderCode" element={<OrderDetails />} /> 
           
           {/* Board (Notice/inquiry) */}
           <Route path="/board" element={<Board />} /> 

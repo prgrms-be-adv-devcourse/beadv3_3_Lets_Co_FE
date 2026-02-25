@@ -6,7 +6,7 @@ import type { CategorySortedResponse } from "../../types/response/categorySorted
 function AddIP() {    
     const [ips, setIPs] = useState<CategorySortedResponse[]>([]);
     const [ipName, setIPName] = useState<string>('');
-    const [parentCode, setParentCode] = useState<string | null>(null);
+    const [parentCode, setParentCode] = useState<string>('0');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ function AddIP() {
 
         const requestData: UpsertCategoryRequest = {
             categoryName: ipName,
-            parentCode: parentCode === "" ? null : parentCode,
+            parentCode: parentCode
         };
 
         try {
@@ -42,7 +42,7 @@ function AddIP() {
             alert("아이피가 성공적으로 추가되었습니다.");
             
             setIPName('');
-            setParentCode(null);
+            setParentCode('0');
             fetchIP(); 
             
         } catch (error) {
@@ -101,13 +101,16 @@ function AddIP() {
                             상위 아이피 위치
                         </label>
                         <select
-                            value={parentCode || ""}
-                            onChange={(e) => setParentCode(e.target.value || null)}
+                            value={parentCode}
+                            onChange={(e) => setParentCode(e.target.value)}
                             className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 block p-3.5 transition-colors outline-none cursor-pointer appearance-none hover:bg-gray-100"
                         >
-                            <option value="" className="font-bold text-purple-600">
+                        <option 
+                            value="0"
+                            className="font-bold text-purple-600"
+                            >
                                 [최상위 아이피로 생성]
-                            </option>
+                        </option>
                             {renderCIPOptions(ips)}
                         </select>
                         <p className="mt-2 text-xs text-gray-400">
