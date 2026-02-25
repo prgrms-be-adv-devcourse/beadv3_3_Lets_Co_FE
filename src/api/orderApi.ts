@@ -19,9 +19,8 @@ export const getOrderList =
                 size: size
             }
         });
-        console.log("전체 응답:", response.data);
 
-        return response.data; 
+        return response.data.data.content; 
     }
 
 export const getOrderDetails =

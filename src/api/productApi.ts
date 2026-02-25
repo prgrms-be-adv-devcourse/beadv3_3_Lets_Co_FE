@@ -38,7 +38,7 @@ export const getIP = async () => {
 }
 
 export const addCategory = async (addData: UpsertCategoryRequest) => {
-    const response = await client.post(`${BASE_URL}/category`, addData);
+    const response = await client.post(`${BASE_URL}/admin/category`, addData);
     console.log(response.data);
 
     return response.data;

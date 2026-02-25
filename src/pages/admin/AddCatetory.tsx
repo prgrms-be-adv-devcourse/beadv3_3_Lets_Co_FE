@@ -6,7 +6,7 @@ import type { CategorySortedResponse } from "../../types/response/categorySorted
 function AddCategory() {    
     const [categories, setCategories] = useState<CategorySortedResponse[]>([]);
     const [categoryName, setCategoryName] = useState<string>('');
-    const [parentCode, setParentCode] = useState<string | null>(null);
+    const [parentCode, setParentCode] = useState<string>('0');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ function AddCategory() {
 
         const requestData: UpsertCategoryRequest = {
             categoryName: categoryName,
-            parentCode: parentCode === "" ? null : parentCode,
+            parentCode: parentCode
         };
 
         try {
@@ -42,7 +42,7 @@ function AddCategory() {
             alert("카테고리가 성공적으로 추가되었습니다.");
             
             setCategoryName('');
-            setParentCode(null);
+            setParentCode('0');
             fetchCategories(); 
             
         } catch (error) {
@@ -101,18 +101,17 @@ function AddCategory() {
                             상위 카테고리 위치
                         </label>
                         <select
-                            value={parentCode || ""}
-                            onChange={(e) => setParentCode(e.target.value || null)}
+                            value={parentCode}
+                            onChange={(e) => setParentCode(e.target.value)}
                             className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-3.5 transition-colors outline-none cursor-pointer appearance-none hover:bg-gray-100"
                         >
-                            <option value="" className="font-bold text-blue-600">
+                        <option 
+                            value="0" 
+                            className="font-bold text-blue-600">
                                 [최상위 카테고리로 생성]
-                            </option>
+                        </option>
                             {renderCategoryOptions(categories)}
                         </select>
-                        <p className="mt-2 text-xs text-gray-400">
-                            * 선택하지 않으면 가장 상위 레벨의 카테고리로 생성됩니다.
-                        </p>
                     </div>
 
                     {/* 추가할 카테고리 이름 입력 */}
