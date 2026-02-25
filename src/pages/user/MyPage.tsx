@@ -96,7 +96,7 @@ function MyPage() {
                     <span className="font-bold text-gray-700 text-lg group-hover:text-blue-600">결제 수단 관리</span>
                 </Link>
 
-                <Link to='/my/order' className="flex flex-col justify-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-blue-300 hover:shadow-md transition-all group">
+                <Link to='/my/orders' className="flex flex-col justify-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-blue-300 hover:shadow-md transition-all group">
                     <span className="text-sm text-gray-400 font-medium mb-1">구매 이력 확인</span>
                     <span className="font-bold text-gray-700 text-lg group-hover:text-blue-600">주문 내역 조회</span>
                 </Link>

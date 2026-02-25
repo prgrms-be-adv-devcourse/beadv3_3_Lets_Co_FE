@@ -42,7 +42,6 @@ function OrderList() {
                     <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-800"></div>
                 </div>
             ) : orders.length === 0 ? (
-                /* 빈 상태 - Product.tsx 스타일 적용 */
                 <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                     <p className="text-gray-500 font-medium">주문 내역이 없습니다.</p>
                 </div>
@@ -63,7 +62,7 @@ function OrderList() {
                                         주문번호: {order.orderCode}
                                     </span>
                                 </div>
-                                <Link to={`/orders/${order.orderCode}`} className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                                <Link to={`/my/orders/${order.orderCode}`} className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
                                     주문 상세 보기 &gt;
                                 </Link>
                             </div>

@@ -28,5 +28,6 @@ export const getOrderDetails =
         const response = await client.get(`${BASE_URL}/${orderCode}`);
         console.log(response.data);
 
-        return response.data;
+    
+        return response.data.data;
     }
