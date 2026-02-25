@@ -42,12 +42,6 @@ function OAuth2Register() {
             alert("올바른 이메일 형식을 100자 이내로 입력해주세요.");
             return;
         }
-
-        const nameRegex = /^[가-힣a-zA-Z ]+$/;
-        if (!nameRegex.test(name) || name.length > 50) {
-            alert("이름은 50자 이하의 한글 또는 영문만 입력 가능합니다.");
-            return;
-        }
         
         if (!gender) {
             alert("성별을 선택해주세요.");
@@ -85,9 +79,11 @@ function OAuth2Register() {
 
         try {
             const response = await oAuth2Register(userData);
-            
-            if (response && response.data) {
-                alert(response.data.data || "정보 등록에 실패했습니다. 입력값을 확인해주세요.");
+
+            // API 성공 여부 판단
+            if (response.data && response.data.success === false) {
+                // 실패 메시지 있을 경우 표시
+                alert(response.data.message || "정보 등록에 실패했습니다. 입력값을 확인해주세요.");
                 return;
             }
 
