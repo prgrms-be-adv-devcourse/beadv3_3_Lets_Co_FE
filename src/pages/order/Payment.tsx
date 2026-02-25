@@ -201,7 +201,7 @@ function Payment() {
       await payment(paymentData);
 
       alert("주문이 완료되었습니다!");
-      navigate("/my/order");
+      navigate("/my/orders");
     } catch (error) {
       console.error("결제 실패:", error);
       alert("주문 처리에 실패했습니다. 다시 시도해주세요.");

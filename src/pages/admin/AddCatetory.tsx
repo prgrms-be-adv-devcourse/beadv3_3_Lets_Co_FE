@@ -1,7 +1,8 @@
 import { useState, useEffect, type FormEvent, type JSX } from "react";
-import { getCategory, addCategory } from "../../api/productApi";
 import type { UpsertCategoryRequest } from "../../types/request/upsertCategoryRequest";
 import type { CategorySortedResponse } from "../../types/response/categorySortedResponse";
+import { getCategory } from "../../api/productApi";
+import { addCategory } from "../../api/adminApi";
 
 function AddCategory() {    
     const [categories, setCategories] = useState<CategorySortedResponse[]>([]);
