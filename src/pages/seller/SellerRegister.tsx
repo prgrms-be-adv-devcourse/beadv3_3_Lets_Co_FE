@@ -16,20 +16,26 @@ function SellerRegister() {
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
-
         e.preventDefault();
 
-        if (!businessLicense || !bankBrand || !bankName || !bankToken) {
+        // 입력값 앞뒤 공백 제거
+        const trimmedSellerName = sellerName.trim();
+        const trimmedBusinessLicense = businessLicense.trim();
+        const trimmedBankBrand = bankBrand.trim();
+        const trimmedBankName = bankName.trim();
+        const trimmedBankToken = bankToken.trim();
+
+        if (!trimmedSellerName || !trimmedBusinessLicense || !trimmedBankBrand || !trimmedBankName || !trimmedBankToken) {
             alert("항목을 모두 입력해주세요.");
             return;
         }
 
         const sellerData: SellerRegisterRequest = {
-            sellerName: sellerName,
-            businessLicense: businessLicense,
-            bankBrand: bankBrand,
-            bankName: bankName,
-            bankToken: bankToken
+            sellerName: trimmedSellerName,
+            businessLicense: trimmedBusinessLicense,
+            bankBrand: trimmedBankBrand,
+            bankName: trimmedBankName,
+            bankToken: trimmedBankToken
         };
 
         try {

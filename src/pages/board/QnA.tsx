@@ -3,7 +3,6 @@ import { addQnA, getQnAList } from "../../api/qnaApi";
 import type { UpsertQnaRequest } from "../../types/response/upsertQnaRequest";
 import { BOARD_CATEGORY_LABELS, BOARD_CATEGORY_OPTIONS } from "../../types/boardCategory";
 import { BOARD_STATUS_LABELS } from "../../types/boardStatus";
-import { Link } from "react-router-dom";
 import type { QnAResponse } from "../../types/response/qnaResponse";
 
 interface QnAProps {
@@ -230,9 +229,7 @@ function QnA({ productcode }: QnAProps) {
                                             {BOARD_STATUS_LABELS[qna.status] || qna.status}
                                         </td>
                                         <td className="px-4 py-3 font-medium text-gray-900 truncate max-w-xs">
-                                            <Link to={`/products/${productcode}/qna/${qna.code}`} className="hover:text-blue-600 hover:underline">
-                                                {qna.title}
-                                            </Link>
+                                            {qna.title}
                                         </td>
                                         <td className="px-4 py-3 text-center text-gray-600">{qna.userName}</td>
                                         <td className="px-4 py-3 text-center text-gray-500">{qna.viewCount}</td>

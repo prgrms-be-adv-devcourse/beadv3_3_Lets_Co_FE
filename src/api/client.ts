@@ -62,6 +62,12 @@ client.interceptors.response.use(
 
     async (error) => {
         const { config, response } = error;
+
+        if (response.status === 401) {
+            alert("인증토큰이 만료되었습니다. 다시 로그인해주세요.");
+        }
+        
+
         // const originalRequest = config; // 토큰 갱신
 
         /* ==========================================================
