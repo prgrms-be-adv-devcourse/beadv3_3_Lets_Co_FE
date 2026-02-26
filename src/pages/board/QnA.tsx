@@ -230,9 +230,7 @@ function QnA({ productcode }: QnAProps) {
                                             {BOARD_STATUS_LABELS[qna.status] || qna.status}
                                         </td>
                                         <td className="px-4 py-3 font-medium text-gray-900 truncate max-w-xs">
-                                            <Link to={`/products/${productcode}/qna/${qna.code}`} className="hover:text-blue-600 hover:underline">
-                                                {qna.title}
-                                            </Link>
+                                            {qna.title}
                                         </td>
                                         <td className="px-4 py-3 text-center text-gray-600">{qna.userName}</td>
                                         <td className="px-4 py-3 text-center text-gray-500">{qna.viewCount}</td>
