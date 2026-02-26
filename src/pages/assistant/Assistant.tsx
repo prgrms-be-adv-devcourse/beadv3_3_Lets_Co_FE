@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import ChatList from "./ChatList";
 import { ask } from "../../api/assistant";
-import type { AssistantProductsResponse } from "../../types/response/assistantResponse copy";
+import type { AssistantProductsResponse } from "../../types/response/assistantResponse";
 
 export type MessageType = {
   role: "user" | "bot";
@@ -10,7 +10,7 @@ export type MessageType = {
   isLoading?: boolean;
 };
 
-function Assistant() {
+function Assistant({ onClose }: { onClose?: () => void }) {
   const [userQuestion, setUserQuestion] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
 
@@ -56,19 +56,45 @@ function Assistant() {
   };
 
   return (
-    <div>
-      <h1>챗 봇</h1>
+    <div className="flex flex-col h-full bg-gray-50">
+      {/* 헤더 영역 */}
+      <div className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-sm">
+        <h2 className="font-semibold text-lg flex items-center gap-2">
+          AI 어시스턴트
+        </h2>
+        {onClose && (
+          <button onClick={onClose} className="hover:text-gray-200 transition-colors">
+            ✕
+          </button>
+        )}
+      </div>
 
-      <ChatList messages={messages} />
+      {/* 채팅 메시지 목록 영역 (스크롤) */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+        {messages.length === 0 ? (
+          <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+            무엇이든 물어보세요!
+          </div>
+        ) : (
+          <ChatList messages={messages} />
+        )}
+      </div>
 
-      <form onSubmit={handleSubmit}>
+      {/* 메시지 입력 영역 */}
+      <form onSubmit={handleSubmit} className="p-3 bg-gray-100 border-t border-gray-200 flex gap-2">
         <input
           type="text"
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          placeholder="메시지를 입력하세요..."
           value={userQuestion}
           onChange={(e) => setUserQuestion(e.target.value)}
         />
-        <button type="submit" disabled={messages[messages.length - 1]?.isLoading}>
-          제출
+        <button 
+          type="submit" 
+          disabled={messages[messages.length - 1]?.isLoading || !userQuestion.trim()}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+        >
+          전송
         </button>
       </form>
     </div>

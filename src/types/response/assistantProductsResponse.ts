@@ -1,4 +1,4 @@
-import type { AssistantProductsResponse } from "./assistantResponse copy";
+import type { AssistantProductsResponse } from "./assistantResponse";
 
 export interface AssistantResponse {
     answer: string;

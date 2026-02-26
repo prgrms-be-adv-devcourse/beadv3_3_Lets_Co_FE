@@ -2,8 +2,7 @@ import { useState } from "react";
 import Product from "./product/Product";
 import logo from "../assets/logo.png";
 import Search from "../components/Search";
-import Assistant from "./assistant/assistant";
-import ActiveButton from "./assistant/ActiveButton";
+import ChatWidget from "./assistant/ChatWidget";
 
 function Home() {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -30,8 +29,7 @@ function Home() {
         <Product searchKeyword={searchKeyword} />
       </div>
 
-      <ActiveButton/>
-      <Assistant/>
+      <ChatWidget />
     </div>
   );
 }
