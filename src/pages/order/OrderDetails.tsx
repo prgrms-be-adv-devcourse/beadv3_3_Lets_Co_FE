@@ -35,11 +35,13 @@ function OrderDetails() {
 
         try {
             await refund(code);
-            alert("환불이 성공적으로 처리되었습니다.");
+            // alert("환불이 성공적으로 처리되었습니다.");
+            alert("환불이 기능은 준비중 입니다.");
             navigate(-1); // 환불 후 이전 페이지로 이동
         } catch (error) {
             console.error("환불 실패: ", error);
-            alert("환불 처리에 실패했습니다.");
+            // alert("환불 처리에 실패했습니다.");
+            alert("환불이 기능은 준비중 입니다.");
         }
     };
 

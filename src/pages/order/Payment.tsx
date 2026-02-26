@@ -256,87 +256,206 @@ function Payment() {
     }
   };
 
-  if (loading) return <div>결제 정보를 불러오는 중입니다...</div>;
-  if (orderList.length === 0) return <div>주문할 상품이 없습니다.</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-800"></div>
+      </div>
+    );
+  }
+
+  if (orderList.length === 0) {
+    return (
+        <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-100 max-w-3xl mx-auto mt-10">
+            <p className="text-gray-500">주문할 상품이 없습니다.</p>
+        </div>
+    );
+  }
 
   return (
-    <div className="relative">
-      <h1>주문 / 결제</h1>
+    <div className="max-w-3xl mx-auto py-10 px-4">
+      {/* 페이지 헤더 */}
+      <div className="mb-8 border-b border-gray-200 pb-4">
+        <h1 className="text-2xl font-bold text-gray-800">주문 / 결제</h1>
+        <p className="text-sm text-gray-500 mt-2">주문하실 상품과 배송지를 확인해주세요.</p>
+      </div>
 
-      <div>
-        <h3>주문 상품 목록</h3>
-        {orderList.map((item, index) => (
-          <div key={index}>
-            <p><strong>{item.productName}</strong></p>
-            <p>옵션: {item.optionName} / 수량: {item.quantity}개</p>
-            <p>금액: {item.totalPrice.toLocaleString()}원</p>
+      <div className="space-y-6">
+        {/* 주문 상품 목록 카드 */}
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <h3 className="text-lg font-bold text-gray-800 mb-5">주문 상품 정보</h3>
+          <div className="space-y-4">
+            {orderList.map((item, index) => (
+              <div key={index} className="flex justify-between items-center pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                <div>
+                  <p className="font-semibold text-gray-800 text-lg">{item.productName}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    옵션: {item.optionName} <span className="mx-2 text-gray-300">|</span> 수량: {item.quantity}개
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-gray-800">{item.totalPrice.toLocaleString()}원</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-        <div>
-          <strong>총 결제 금액: {totalPrice.toLocaleString()}원</strong>
-        </div>
-      </div>
+          <div className="mt-6 pt-5 border-t border-gray-200 bg-gray-50 p-4 rounded-xl flex justify-between items-center">
+            <span className="font-bold text-gray-600">총 결제 금액</span>
+            <span className="text-2xl font-bold text-blue-600">{totalPrice.toLocaleString()}원</span>
+          </div>
+        </section>
 
-      <hr />
-
-      <h3>배송지 정보</h3>
-      <div>
-        <input placeholder="받는 분 성함" value={recipient} onChange={e => setRecipient(e.target.value)} />
-        <input placeholder="전화번호 (010-0000-0000)" value={phone} onChange={e => setPhone(e.target.value)} />
-        <input placeholder="주소" value={address} onChange={e => setAddress(e.target.value)} />
-        <input placeholder="상세주소" value={addressDetail} onChange={e => setAddressDetail(e.target.value)} />
-      </div>
-
-      <hr />
-
-      <h3>결제 수단</h3>
-      <div>
-        <label>
-          <input type="radio" name="payType" checked={paymentType === "CARD"} onChange={() => setPaymentType("CARD")} />
-          카드 결제
-        </label>
-        <label>
-          <input type="radio" name="payType" checked={paymentType === "DEPOSIT"} onChange={() => setPaymentType("DEPOSIT")} />
-          예치금 결제
-        </label>
-        <label>
-          <input type="radio" name="payType" checked={paymentType === "TOSS_PAY"} onChange={() => setPaymentType("TOSS_PAY")} />
-          토스 결제
-        </label>
-      </div>
-
-      <div>
-        {paymentType === "CARD" && (
-          <div>
-            <h4>카드 정보 입력</h4>
-            <input placeholder="카드 소유주" value={cardName} onChange={e => setCardName(e.target.value)} />
-            <select value={cardBrand} onChange={e => setCardBrand(e.target.value)}>
-              <option value="VISA">VISA</option>
-              <option value="MASTERCARD">MasterCard</option>
-            </select>
+        {/* 배송지 정보 카드 */}
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <h3 className="text-lg font-bold text-gray-800 mb-5">배송지 정보</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <input placeholder="MM" value={expMonth} onChange={e => setExpMonth(e.target.value)} maxLength={2} />
-              <input placeholder="YYYY" value={expYear} onChange={e => setExpYear(e.target.value)} maxLength={4} />
+              <label className="block text-sm font-bold text-gray-700 mb-2">받는 분 성함</label>
+              <input 
+                placeholder="홍길동" 
+                value={recipient} 
+                onChange={e => setRecipient(e.target.value)} 
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">연락처</label>
+              <input 
+                placeholder="010-0000-0000" 
+                value={phone} 
+                onChange={e => setPhone(e.target.value)} 
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
             </div>
           </div>
-        )}
-
-        {paymentType === "DEPOSIT" && (
-          <div>
-            <p>보유하신 예치금에서 <strong>{totalPrice.toLocaleString()}원</strong>이 즉시 차감됩니다.</p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">주소</label>
+              <input 
+                placeholder="기본 주소를 입력하세요" 
+                value={address} 
+                onChange={e => setAddress(e.target.value)} 
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">상세 주소</label>
+              <input 
+                placeholder="상세 주소를 입력하세요 (동, 호수)" 
+                value={addressDetail} 
+                onChange={e => setAddressDetail(e.target.value)} 
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
           </div>
-        )}
+        </section>
 
-        {paymentType === "TOSS_PAY" && (
-          <div>
-            <p>결제하기 버튼을 누르면 <strong>토스 페이먼츠</strong> 화면으로 이동합니다.</p>
+        {/* 결제 수단 선택 카드 */}
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <h3 className="text-lg font-bold text-gray-800 mb-5">결제 수단</h3>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            <label className={`cursor-pointer rounded-xl border p-4 flex items-center justify-center gap-2 transition-all ${
+                paymentType === "CARD" ? "border-blue-500 bg-blue-50 text-blue-700 font-bold" : "border-gray-200 text-gray-600 hover:bg-gray-50"
+            }`}>
+              <input type="radio" name="payType" className="hidden" checked={paymentType === "CARD"} onChange={() => setPaymentType("CARD")} />
+              신용/체크카드
+            </label>
+            <label className={`cursor-pointer rounded-xl border p-4 flex items-center justify-center gap-2 transition-all ${
+                paymentType === "DEPOSIT" ? "border-blue-500 bg-blue-50 text-blue-700 font-bold" : "border-gray-200 text-gray-600 hover:bg-gray-50"
+            }`}>
+              <input type="radio" name="payType" className="hidden" checked={paymentType === "DEPOSIT"} onChange={() => setPaymentType("DEPOSIT")} />
+              예치금 결제
+            </label>
+            <label className={`cursor-pointer rounded-xl border p-4 flex items-center justify-center gap-2 transition-all ${
+                paymentType === "TOSS_PAY" ? "border-blue-500 bg-blue-50 text-blue-700 font-bold" : "border-gray-200 text-gray-600 hover:bg-gray-50"
+            }`}>
+              <input type="radio" name="payType" className="hidden" checked={paymentType === "TOSS_PAY"} onChange={() => setPaymentType("TOSS_PAY")} />
+              토스 결제
+            </label>
           </div>
-        )}
+
+          {/* 결제 수단별 상세 영역 */}
+          <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+            {paymentType === "CARD" && (
+              <div className="space-y-5">
+                <h4 className="text-sm font-bold text-gray-700 border-b border-gray-200 pb-2">상세 카드 정보</h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1.5 font-medium">카드 소유주</label>
+                    <input 
+                      placeholder="홍길동" 
+                      value={cardName} 
+                      onChange={e => setCardName(e.target.value)} 
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1.5 font-medium">카드 브랜드</label>
+                    <select 
+                      value={cardBrand} 
+                      onChange={e => setCardBrand(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                    >
+                      <option value="VISA">VISA</option>
+                      <option value="MASTERCARD">MasterCard</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5 font-medium">유효 기간 (MM/YY)</label>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      placeholder="MM" 
+                      maxLength={2}
+                      value={expMonth} 
+                      onChange={e => setExpMonth(e.target.value)} 
+                      className="w-20 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                    />
+                    <span className="text-gray-400 font-light">/</span>
+                    <input 
+                      placeholder="YY" 
+                      maxLength={2}
+                      value={expYear} 
+                      onChange={e => setExpYear(e.target.value)} 
+                      className="w-20 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {paymentType === "DEPOSIT" && (
+              <div className="text-center py-4">
+                <div className="inline-block bg-blue-100 text-blue-600 rounded-full p-3 mb-3">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <p className="text-gray-700">보유하신 예치금에서 <strong className="text-blue-600 text-lg">{totalPrice.toLocaleString()}원</strong>이 즉시 차감됩니다.</p>
+              </div>
+            )}
+
+            {paymentType === "TOSS_PAY" && (
+              <div className="text-center py-4">
+                <div className="inline-block bg-blue-100 text-blue-600 rounded-full p-3 mb-3">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                </div>
+                <p className="text-gray-700">결제하기 버튼을 누르면 안전한 <strong>토스 페이먼츠</strong> 화면으로 이동합니다.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 최종 결제 버튼 */}
+        <button 
+          onClick={handlePayment}
+          className="w-full bg-gray-800 text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 active:bg-black transition-all shadow-md mt-6"
+        >
+          {totalPrice.toLocaleString()}원 결제하기
+        </button>
+
       </div>
-
-      <button onClick={handlePayment}>
-        {totalPrice.toLocaleString()}원 결제하기
-      </button>
 
       <QueueModal isOpen={isWaiting} queueInfo={queueInfo} />
     </div>
