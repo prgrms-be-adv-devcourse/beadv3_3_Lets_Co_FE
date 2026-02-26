@@ -73,6 +73,11 @@ export default defineConfig({
       '/settlement': {
         target: "http://localhost:8000",
         changeOrigin: true
+      },
+
+      '/assistant': {
+        target: "http://localhost:8000",
+        changeOrigin: true
       }
     }
   }
