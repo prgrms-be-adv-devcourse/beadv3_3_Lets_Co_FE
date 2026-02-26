@@ -54,7 +54,7 @@ export function SuccessPage() {
         sessionStorage.removeItem("temp_order_address");
         
         alert("결제가 정상적으로 완료되었습니다.");
-        navigate("/my/order");
+        navigate("/my/orders");
       } catch (error) {
         console.error("승인 실패:", error);
         alert("결제 승인 중 오류가 발생했습니다. 관리자에게 문의하세요.");

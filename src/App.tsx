@@ -47,6 +47,7 @@ import SellerProductDetails from "./pages/seller/SellerProductDetails";
 import OrderList from "./pages/order/OrderList";
 import OrderDetails from "./pages/order/OrderDetails";
 import Payment from "./pages/order/Payment";
+import SellerQnAList from "./pages/seller/SellerQnAList";
 
 function App() {
   const { isLogin } = useAuth();
@@ -90,6 +91,8 @@ function App() {
           <Route path="/seller/product/add" element={<AddProduct />} /> 
           <Route path="/seller/product/list" element={<SellerProduct />} /> 
           <Route path="/seller/product/:code" element={<SellerProductDetails />} />
+          <Route path="/seller/board/qna" element={<SellerQnAList />} />
+          
 
           {/* Admin */}
           <Route path="/admin" element={<Admin />} /> 

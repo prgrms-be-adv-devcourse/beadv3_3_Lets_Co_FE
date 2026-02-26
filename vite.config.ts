@@ -78,6 +78,11 @@ export default defineConfig({
       '/assistant': {
         target: "http://localhost:8000",
         changeOrigin: true
+      },
+
+      '/queue': {
+        target: "http://localhost:8000",
+        changeOrigin: true
       }
     }
   }
