@@ -1,15 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import type { CartItemResponse } from "../../types/response/cartItemResponse"; 
 import type { OrderRequest } from "../../types/request/orderRequest";
 import { order } from "../../api/orderApi";
 import { getCartList, plusCart, minusCart, deleteCart } from "../../api/cartApi";
+import QueueModal from "../../components/QueueModal";
+import type { WaitingQueueResponse } from "../../types/response/waitingQueueResponse";
+import { enterRegister, enterStatus } from "../../api/queue";
 
 function Cart() {
     const [cartItem, setCartItem] = useState<CartItemResponse[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [isWaiting, setIsWaiting] = useState<boolean>(false);
+    const [queueInfo, setQueueInfo] = useState<WaitingQueueResponse | null>(null);
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     
     const navigate = useNavigate();
+
+    // 컴포넌트 언마운트 시 인터벌 정리
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchCartList = async () => {
@@ -87,39 +100,80 @@ function Cart() {
         }
     };
 
+    // --- 공통 입장 대기열 처리 함수 로직 ---
+    const handleQueueAndExecute = async (actionCallback: () => void) => {
+        try {
+            setIsWaiting(true); // 대기 모달 ON
+            
+            // 대기열 등록 (토큰 발급)
+            const queueToken = await enterRegister();
+
+            // 1초마다 상태 체크 (Polling)
+            intervalRef.current = setInterval(async () => {
+                try {
+                    const status = await enterStatus(queueToken);
+                    setQueueInfo(status);
+
+                    // 3. 내 차례가 되어 입장이 허용된 경우
+                    if (status.isAllowed) {
+                        if (intervalRef.current) clearInterval(intervalRef.current);
+                        setIsWaiting(false);
+                        
+                        // 대기열 통과 후 원래 실행하려던 액션(주문/결제창 이동) 실행
+                        actionCallback();
+                    }
+                } catch (error) {
+                    console.error("대기열 상태 확인 중 오류 발생:", error);
+                    if (intervalRef.current) clearInterval(intervalRef.current);
+                    setIsWaiting(false);
+                    alert("대기열 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
+            }, 1000); // 1초 대기
+
+        } catch (error) {
+            console.error("대기열 등록 실패:", error);
+            setIsWaiting(false);
+            alert("대기열 진입에 실패했습니다.");
+        }
+    };
+
+    // 장바구니 주문 처리
     const handleOrder = async () => {
         if (cartItem.length === 0) {
             alert("주문할 상품이 없습니다.");
             return;
         }
 
-        const orderData: OrderRequest = {
-            orderType: "CART",
-            productInfo: null
-        };
+        // 주문 로직을 대기열 검증 함수로 감싸기
+        handleQueueAndExecute(async () => {
+            const orderData: OrderRequest = {
+                orderType: "CART",
+                productInfo: null
+            };
 
-        try {
-            const response = await order(orderData);
-            const orderCode = response.data.orderCode;
+            try {
+                const response = await order(orderData);
+                const orderCode = response.data.orderCode;
 
-            if (!orderCode) {
-                console.error("주문 번호 누락:", response);
-                alert("주문 처리에 실패했습니다. (주문 번호 없음)");
-                return;
+                if (!orderCode) {
+                    console.error("주문 번호 누락:", response);
+                    alert("주문 처리에 실패했습니다. (주문 번호 없음)");
+                    return;
+                }
+
+                navigate("/payment", { 
+                    state: { 
+                        orderCode: orderCode,
+                        orderType: "CART", 
+                        cartItems: cartItem 
+                    } 
+                });
+
+            } catch (error) {
+                console.error("주문 생성 실패", error);
+                alert("주문 생성 중 오류가 발생했습니다.");
             }
-
-            navigate("/payment", { 
-                state: { 
-                    orderCode: orderCode,
-                    orderType: "CART", 
-                    cartItems: cartItem 
-                } 
-            });
-
-        } catch (error) {
-            console.error("주문 생성 실패", error);
-            alert("주문 생성 중 오류가 발생했습니다.");
-        }
+        });
     };
 
     if (loading) {
@@ -131,7 +185,7 @@ function Cart() {
     }
 
     return (
-        <div className="w-full max-w-5xl mx-auto py-10 px-4 sm:px-6">
+        <div className="w-full max-w-5xl mx-auto py-10 px-4 sm:px-6 relative">
             <h1 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-2">
                 <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
                 장바구니
@@ -233,6 +287,8 @@ function Cart() {
                     </div>
                 </div>
             )}
+
+            <QueueModal isOpen={isWaiting} queueInfo={queueInfo} />
         </div>
     );
 }

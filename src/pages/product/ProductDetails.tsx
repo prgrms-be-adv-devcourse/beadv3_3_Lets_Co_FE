@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, useRef, type FormEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProduct } from "../../api/productApi";
 import { addCart } from "../../api/cartApi";
@@ -11,6 +11,9 @@ import type { ProductRequest } from "../../types/request/productRequest";
 
 import ProductOptionList from "../../components/ProductOptionList";
 import QnA from "../board/QnA";
+import QueueModal from "../../components/QueueModal";
+import type { WaitingQueueResponse } from "../../types/response/waitingQueueResponse";
+import { enterRegister, enterStatus } from "../../api/queue";
 
 function ProductDetails() {
     const { productCode } = useParams<{ productCode: string }>();
@@ -21,8 +24,18 @@ function ProductDetails() {
 
     const [selectedOptionCode, setSelectedOptionCode] = useState<string>("");
     const [quantity, setQuantity] = useState<number>(1);
-    
     const [mainImage, setMainImage] = useState<string>("");
+
+    const [isWaiting, setIsWaiting] = useState<boolean>(false);
+    const [queueInfo, setQueueInfo] = useState<WaitingQueueResponse | null>(null);
+    
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         if (!productCode) return;
@@ -32,7 +45,6 @@ function ProductDetails() {
                 const data = await getProduct(productCode);
                 setProduct(data);
                 
-                // 이미지가 존재하면 첫 번째 이미지를 메인으로 설정
                 if (data.images && data.images.length > 0) {
                     setMainImage(data.images[0].urls);
                 }
@@ -79,24 +91,63 @@ function ProductDetails() {
         };
     };
 
+    // --- 공통 대기열 처리 함수 로직 ---
+    const handleQueueAndExecute = async (actionCallback: () => void) => {
+        try {
+            setIsWaiting(true);
+            
+            // 대기열 등록 (토큰 발급)
+            const queueToken = await enterRegister();
+
+            // 1초마다 상태 체크 (Polling)
+            intervalRef.current = setInterval(async () => {
+                try {
+                    const status = await enterStatus(queueToken);
+                    setQueueInfo(status);
+
+                    // 내 차례가 되어 입장이 허용된 경우
+                    if (status.isAllowed) {
+                        if (intervalRef.current) clearInterval(intervalRef.current);
+                        setIsWaiting(false);
+                        
+                        // 대기열 통과 후 원래 실행하려던 액션 실행
+                        actionCallback();
+                    }
+                } catch (error) {
+                    console.error("대기열 상태 확인 중 오류 발생:", error);
+                    if (intervalRef.current) clearInterval(intervalRef.current);
+                    setIsWaiting(false);
+                    alert("대기열 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
+            }, 1000);
+
+        } catch (error) {
+            console.error("대기열 등록 실패:", error);
+            setIsWaiting(false);
+            alert("대기열 진입에 실패했습니다.");
+        }
+    };
+
     const handleAddToCart = async () => {
         const selection = getValidSelection();
         if (!selection) return;
 
-        try {
-            await addCart({
-                productCode: selection.productCode,
-                optionCode: selection.optionCode,
-                quantity: selection.quantity
-            });
+        handleQueueAndExecute(async () => {
+            try {
+                await addCart({
+                    productCode: selection.productCode,
+                    optionCode: selection.optionCode,
+                    quantity: selection.quantity
+                });
 
-            if (window.confirm("장바구니에 상품을 담았습니다.\n장바구니로 이동하시겠습니까?")) {
-                navigate("/cart");
+                if (window.confirm("장바구니에 상품을 담았습니다.\n장바구니로 이동하시겠습니까?")) {
+                    navigate("/cart");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("장바구니 담기에 실패했습니다.");
             }
-        } catch (error) {
-            console.error(error);
-            alert("장바구니 담기에 실패했습니다.");
-        }
+        });
     };
 
     const handleBuyNow = async (e: FormEvent) => {
@@ -105,34 +156,36 @@ function ProductDetails() {
         const selection = getValidSelection();
         if (!selection) return;
 
-        const productInfo: ProductRequest = {
-            productCode: selection.productCode,
-            optionCode: selectedOptionCode,
-            quantity: selection.quantity
-        };
+        handleQueueAndExecute(async () => {
+            const productInfo: ProductRequest = {
+                productCode: selection.productCode,
+                optionCode: selectedOptionCode,
+                quantity: selection.quantity
+            };
 
-        const orderData: OrderRequest = {
-            orderType: "DIRECT",
-            productInfo: productInfo
-        };
+            const orderData: OrderRequest = {
+                orderType: "DIRECT",
+                productInfo: productInfo
+            };
 
-        try {
-            const response = await order(orderData);
-            const orderCode = response.data.orderCode;
+            try {
+                const response = await order(orderData);
+                const orderCode = response.data.orderCode;
 
-            navigate("/payment", { 
-                state: { 
-                    orderCode: orderCode,
-                    orderType: "DIRECT",
-                    productCode: selection.productCode,
-                    optionCode: selection.optionCode,
-                    quantity: selection.quantity
-                } 
-            });
-        } catch (error) {
-            console.error(error);
-            alert("주문 처리 중 오류가 발생했습니다.");
-        }
+                navigate("/payment", { 
+                    state: { 
+                        orderCode: orderCode,
+                        orderType: "DIRECT",
+                        productCode: selection.productCode,
+                        optionCode: selection.optionCode,
+                        quantity: selection.quantity
+                    } 
+                });
+            } catch (error) {
+                console.error(error);
+                alert("주문 처리 중 오류가 발생했습니다.");
+            }
+        });
     };
 
     if (loading) {
@@ -157,34 +210,25 @@ function ProductDetails() {
         );
     }
 
-    // 카테고리 텍스트 생성 (ex: 가구 > 의자)
     const categoryText = product.category && product.category.length > 0 
         ? product.category.map(c => c.categoryName).join(" > ") 
         : "미분류";
 
-    // 아이피(IP) 텍스트 생성 (ex: 산리오 > 헬로키티)
     const ipText = product.ip && product.ip.length > 0 
         ? product.ip.map(i => i.categoryName).join(" > ") 
         : "";
 
-    // 선택된 옵션 객체 가져오기 (총 금액 계산용)
     const selectedOpt = product.options.find(opt => opt.code === selectedOptionCode);
-    
-    // 할인가 적용 로직 주석 처리 
-    // const basePrice = product.salePrice > 0 && product.salePrice < product.price ? product.salePrice : product.price;
-    
-    // 할인가를 무시하고 항상 원가 기준 적용
     const basePrice = product.price;
     const currentUnitPrice = selectedOpt ? selectedOpt.price : basePrice;
     const totalPrice = currentUnitPrice * quantity;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
             <div className="flex flex-col lg:flex-row gap-12 mb-16">
                 
                 {/* 좌측: 이미지 갤러리 */}
                 <div className="w-full lg:w-1/2 flex flex-col gap-4">
-                    {/* 메인 이미지 */}
                     <div className="aspect-square bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden relative">
                         {mainImage ? (
                             <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
@@ -193,7 +237,6 @@ function ProductDetails() {
                                 이미지가 없습니다
                             </div>
                         )}
-                        {/* 품절 배지 */}
                         {product.status === "SOLD_OUT" && (
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
                                 <span className="bg-red-500 text-white px-6 py-2 text-lg font-bold rounded-full shadow-lg">
@@ -203,7 +246,6 @@ function ProductDetails() {
                         )}
                     </div>
                     
-                    {/* 썸네일 리스트 */}
                     {product.images && product.images.length > 1 && (
                         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                             {product.images.map((img, idx) => (
@@ -224,7 +266,6 @@ function ProductDetails() {
                 {/* 우측: 상품 기본 정보 및 옵션 폼 */}
                 <div className="w-full lg:w-1/2 flex flex-col">
                     
-                    {/* 카테고리 & 아이피(IP) 영역*/}
                     <div className="flex flex-col gap-1 mb-3">
                         <span className="text-sm font-bold text-blue-600">
                             {categoryText}
@@ -240,22 +281,8 @@ function ProductDetails() {
                         {product.name}
                     </h1>
                     
-                    {/* 가격 및 조회수 영역 */}
                     <div className="flex items-end justify-between border-b border-gray-100 pb-6 mb-6">
                         <div className="flex items-center gap-3">
-                            
-{/* 할인가 노출 UI 주석 처리
-                            {product.salePrice > 0 && product.salePrice < product.price ? (
-                                <>
-                                    <span className="text-3xl font-bold text-red-500">{product.salePrice.toLocaleString()}원</span>
-                                    <span className="text-lg text-gray-400 line-through decoration-1">{product.price.toLocaleString()}원</span>
-                                </>
-                            ) : (
-                                <span className="text-3xl font-bold text-gray-900">{product.price.toLocaleString()}원</span>
-                            )}
-*/}
-
-                            {/* 무조건 원가 표시 */}
                             <span className="text-3xl font-bold text-gray-900">{product.price.toLocaleString()}원</span>
                         </div>
                         <span className="text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-md">
@@ -263,9 +290,7 @@ function ProductDetails() {
                         </span>
                     </div>
 
-                    {/* 구매 폼 */}
                     <form onSubmit={handleBuyNow} className="flex flex-col flex-grow">
-                        {/* 옵션 선택 */}
                         <div className="mb-5">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">옵션 선택</label>
                             <select 
@@ -287,7 +312,6 @@ function ProductDetails() {
                             </select>
                         </div>
 
-                        {/* 수량 선택 */}
                         <div className="mb-8">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">수량</label>
                             <div className="flex items-center border border-gray-300 rounded-lg w-fit overflow-hidden bg-white">
@@ -316,7 +340,6 @@ function ProductDetails() {
                             </div>
                         </div>
 
-                        {/* 총 결제 금액 */}
                         <div className="mt-auto bg-gray-50 p-5 rounded-xl border border-gray-100 flex justify-between items-center mb-6">
                             <span className="text-gray-600 font-medium">총 상품 금액</span>
                             <div className="text-right">
@@ -325,7 +348,6 @@ function ProductDetails() {
                             </div>
                         </div>
 
-                        {/* 액션 버튼 */}
                         <div className="flex gap-4 mt-auto">
                             <button 
                                 type="button" 
@@ -349,8 +371,6 @@ function ProductDetails() {
 
             {/* 하단 상세 정보 영역 */}
             <div className="mt-20 border-t border-gray-200 pt-16">
-                
-                {/* 상품 상세 설명 */}
                 <section className="mb-20">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
@@ -361,7 +381,6 @@ function ProductDetails() {
                     </div>
                 </section>
 
-                {/* 상품 옵션 목록 */}
                 <section className="mb-20">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
@@ -370,7 +389,6 @@ function ProductDetails() {
                     <ProductOptionList options={product.options} />
                 </section>
 
-                {/* 상품 문의 (QnA) */}
                 <section>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                         <span className="w-1 h-6 bg-blue-600 rounded-full"></span>
@@ -380,8 +398,10 @@ function ProductDetails() {
                         <QnA productcode={product.productsCode} />
                     </div>
                 </section>
-
             </div>
+
+            <QueueModal isOpen={isWaiting} queueInfo={queueInfo} />
+
         </div>
     );
 }
