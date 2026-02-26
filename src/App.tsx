@@ -16,7 +16,6 @@ import SellerRegister from "./pages/seller/SellerRegister";
 import SellerCheck from "./pages/seller/SellerCheck";
 import AddProduct from "./pages/seller/AddProduct";
 import ProductDetails from "./pages/product/ProductDetails";
-import Payment from "./pages/order/Payment";
 import Cart from "./pages/order/Cart";
 import Charge from "./pages/order/Charge";
 import CheckoutPage from "./pages/toss/CheckoutPage";
@@ -47,6 +46,7 @@ import SellerProduct from "./pages/seller/SellerProduct";
 import SellerProductDetails from "./pages/seller/SellerProductDetails";
 import OrderList from "./pages/order/OrderList";
 import OrderDetails from "./pages/order/OrderDetails";
+import Payment from "./pages/order/Payment";
 
 function App() {
   const { isLogin } = useAuth();

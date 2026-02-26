@@ -1,11 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { PaymentRequest } from "../../types/request/paymentRequest";
 import type { UserInfo } from "../../types/userInfo";
 import type { AddressInfo } from "../../types/addressInfo";
 import type { CardInfo } from "../../types/cardInfo";
 import { getProduct } from "../../api/productApi";
 import { payment } from "../../api/paymentApi";
+import QueueModal from "../../components/QueueModal";
+import type { WaitingQueueResponse } from "../../types/response/waitingQueueResponse";
+import { orderEnter, orderStatus } from "../../api/queue";
 
 // UI 표시용 타입
 interface OrderItemView {
@@ -41,6 +44,11 @@ function Payment() {
   const [orderList, setOrderList] = useState<OrderItemView[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // --- 대기열 관리를 위한 상태 및 Ref 추가 ---
+  const [isWaiting, setIsWaiting] = useState<boolean>(true); // 진입하자마자 대기 상태로 시작
+  const [queueInfo, setQueueInfo] = useState<WaitingQueueResponse | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   // 배송지 정보
   const [recipient, setRecipient] = useState("");
   const [address, setAddress] = useState("");
@@ -55,6 +63,14 @@ function Payment() {
   const [expYear, setExpYear] = useState("");
   const [cardToken] = useState("");
 
+  // 컴포넌트 언마운트 시 인터벌 정리
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  // 대기열 및 상품 정보 불러오기
   useEffect(() => {
     if (!stateParams || !stateParams.orderCode) {
       alert("잘못된 접근입니다 (주문 정보 누락).");
@@ -62,6 +78,35 @@ function Payment() {
       return;
     }
 
+    // 주문 대기열 입장 로직
+    const startOrderQueue = async () => {
+      try {
+        setIsWaiting(true);
+        await orderEnter(); // 주문 대기열 진입 API 호출
+
+        intervalRef.current = setInterval(async () => {
+          try {
+            const status = await orderStatus(); // 상태 조회
+            setQueueInfo(status);
+
+            if (status.isAllowed) {
+              if (intervalRef.current) clearInterval(intervalRef.current);
+              setIsWaiting(false); // 내 차례가 오면 모달 닫기
+            }
+          } catch (error) {
+            console.error("주문 대기열 상태 확인 중 오류:", error);
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            setIsWaiting(false);
+          }
+        }, 1000);
+
+      } catch (error) {
+        console.error("주문 대기열 진입 실패:", error);
+        setIsWaiting(false);
+      }
+    };
+
+    // 상품 정보 불러오기 로직 (기존 로직 유지)
     const fetchOrderData = async () => {
       try {
         if (stateParams.orderType === "DIRECT") {
@@ -111,7 +156,10 @@ function Payment() {
       }
     };
 
+    // 컴포넌트 마운트 시 두 가지를 모두 실행
+    startOrderQueue();
     fetchOrderData();
+    
   }, [stateParams, navigate]);
 
   const totalPrice = orderList.reduce((acc, cur) => acc + cur.totalPrice, 0);
@@ -212,7 +260,7 @@ function Payment() {
   if (orderList.length === 0) return <div>주문할 상품이 없습니다.</div>;
 
   return (
-    <div>
+    <div className="relative">
       <h1>주문 / 결제</h1>
 
       <div>
@@ -289,6 +337,8 @@ function Payment() {
       <button onClick={handlePayment}>
         {totalPrice.toLocaleString()}원 결제하기
       </button>
+
+      <QueueModal isOpen={isWaiting} queueInfo={queueInfo} />
     </div>
   );
 }
