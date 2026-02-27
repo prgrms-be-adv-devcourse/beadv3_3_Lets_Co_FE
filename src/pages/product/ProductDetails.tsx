@@ -306,7 +306,7 @@ function ProductDetails() {
                                         value={opt.code}
                                         disabled={opt.stock <= 0}
                                     >
-                                        {opt.name} {opt.stock <= 0 ? "(품절)" : `(+${opt.price.toLocaleString()}원)`}
+                                        {opt.name} {opt.stock <= 0 ? "(품절)" : `(${opt.price.toLocaleString()}원)`}
                                     </option>
                                 ))}
                             </select>

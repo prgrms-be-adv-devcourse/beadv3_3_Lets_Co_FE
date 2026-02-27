@@ -64,7 +64,13 @@ client.interceptors.response.use(
         const { config, response } = error;
 
         if (response.status === 401) {
-            alert("인증토큰이 만료되었습니다. 다시 로그인해주세요.");
+
+            const isAuthCheckApi = config.url?.includes('/users/my');
+
+            if (!isAuthCheckApi) {
+            alert("인증토큰이 만료되었습니다.");
+            window.location.href = '/login'; 
+        }
         }
         
 
